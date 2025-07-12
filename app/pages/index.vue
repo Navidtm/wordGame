@@ -2,6 +2,19 @@
   <div class="flex justify-around p-12 items-center flex-col">
     <div class="">
       <div
+        dir="ltr"
+        class="mb-2 flex justify-center"
+      >
+        <USwitch
+          @change="
+            selectedWord = null;
+            focusInput(letters.findIndex((v) => v == ''));
+          "
+          v-model="isMyTurn"
+          :label="isMyTurn ? 'نوبت من' : 'نوبت حریف'"
+        />
+      </div>
+      <div
         ref="inputsEl"
         class="grid grid-cols-4 mb-2"
       >
@@ -11,6 +24,7 @@
           v-model="letters[n]"
           color="info"
           maxlength="1"
+          @click="letters[n] = ''"
           @keyup.delete="onDelete(n)"
           @focus="letters[n] ? nextInput(n) : {}"
           @input="nextInput(n)"
@@ -46,6 +60,7 @@ import type { APIWordRes, Word } from '~~/shared/types/api/word.post';
 const inputRefs = useTemplateRef<HTMLDivElement>('inputsEl');
 const selectedWord = ref<Word | null>();
 const letters = ref<string[]>([]);
+const isMyTurn = ref(true);
 
 const { data, status, refresh, clear } = useFetch<APIWordRes>('/api/word', {
   method: 'post',
@@ -83,7 +98,7 @@ const onDelete = async (n: number) => {
 const nextInput = async (n: number) => {
   await delay(20);
 
-  if (letters.value[n]) {
+  if (letters.value[n] && isMyTurn.value) {
     n == 15 ? refresh() : focusInput(n + 1);
   }
 };
