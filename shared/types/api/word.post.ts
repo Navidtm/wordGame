@@ -6,7 +6,7 @@ export type Word = {
 
 export type WordApi = {
   body: {
-    letters: string[][];
+    letters: string[];
   };
 };
 

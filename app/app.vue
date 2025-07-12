@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <UApp>
     <NuxtLayout>
@@ -5,5 +7,3 @@
     </NuxtLayout>
   </UApp>
 </template>
-
-<script setup lang="ts"></script>
