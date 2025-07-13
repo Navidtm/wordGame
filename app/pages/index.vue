@@ -55,10 +55,8 @@ const { data, status, refresh, clear } = useFetch<APIWordRes>('/api/word', {
   immediate: false
 });
 
-const focusInput = (n: number) => {
-  const input = inputRefs.value?.children.item(n)?.firstChild as HTMLInputElement;
-  input.focus();
-};
+const focusInput = (n: number) =>
+  (inputRefs.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
 
 const focusFirstEmptyInput = () => {
   nextTick(() => {
@@ -68,7 +66,8 @@ const focusFirstEmptyInput = () => {
 };
 
 const deleteAll = () => {
-  letters.value = [];
+  letters.value.fill('');
+  selectedWord.value = null;
   clear();
   focusInput(0);
 };
@@ -79,7 +78,7 @@ const onDelete = (n: number) => {
   focusInput(n - 1);
 };
 
-const deleteWord = async () => {
+const deleteWord = () => {
   selectedWord.value!.path.forEach((v) => (letters.value[v] = ''));
   focusFirstEmptyInput();
   selectedWord.value = null;
