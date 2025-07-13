@@ -11,10 +11,7 @@ defineProps<{
 </script>
 <template>
   <div class="">
-    <div
-      v-if="status == 'success'"
-      class="grid grid-cols-4 gap-5 p-8"
-    >
+    <div v-if="status == 'success'">
       <slot></slot>
     </div>
     <div

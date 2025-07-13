@@ -2,19 +2,6 @@
   <div class="flex justify-around p-12 items-center flex-col">
     <div class="">
       <div
-        dir="ltr"
-        class="mb-2 flex justify-center"
-      >
-        <USwitch
-          @change="
-            selectedWord = null;
-            focusInput(letters.findIndex((v) => v == ''));
-          "
-          v-model="isMyTurn"
-          :label="isMyTurn ? 'نوبت من' : 'نوبت حریف'"
-        />
-      </div>
-      <div
         ref="inputsEl"
         class="grid grid-cols-4 mb-2"
       >
@@ -26,7 +13,7 @@
           maxlength="1"
           @click="letters[n] = ''"
           @keyup.delete="onDelete(n)"
-          @focus="letters[n] ? nextInput(n) : {}"
+          @focus="focusInput(n)"
           @input="nextInput(n)"
           size="xl"
           :class="{
@@ -56,62 +43,60 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from 'es-toolkit';
 import WordTable from '~/components/wordTable.vue';
 
 const inputRefs = useTemplateRef<HTMLDivElement>('inputsEl');
 const selectedWord = ref<Word | null>();
-const letters = ref<string[]>([]);
-const isMyTurn = ref(true);
+const letters = ref<string[]>(new Array(16).fill(''));
 
 const { data, status, refresh, clear } = useFetch<APIWordRes>('/api/word', {
   query: {
     letters
   },
+  watch: false,
   immediate: false
 });
 
 const focusInput = (n: number) => {
-  (inputRefs.value?.children.item(n)?.children.item(0) as HTMLInputElement).focus();
+  const input = inputRefs.value?.children.item(n)?.children.item(0) as HTMLInputElement;
+  input.focus();
+  selectedWord.value = null;
 };
 
-const del = async () => {
+const focusFirstEmptyInput = () => {
+  const firstIndex = letters.value.findIndex((v) => v == '');
+  firstIndex > 0 ? focusInput(firstIndex) : refresh();
+};
+
+const del = () => {
   letters.value = [];
-  selectedWord.value = null;
   clear();
-  await delay(10);
   focusInput(0);
 };
 
-const onDelete = async (n: number) => {
-  await delay(10);
-  if (n > 0) {
-    if (letters.value[n]) {
-      letters.value[n] = '';
-    } else {
-      letters.value[n - 1] = '';
-      await delay(10);
-      focusInput(n - 1);
-    }
-  }
+const onDelete = (n: number) => {
+  if (n == 0) return;
+
+  letters.value[n] ? (letters.value[n] = '') : (letters.value[n - 1] = '');
+
+  nextTick(() => {
+    focusInput(n - 1);
+  });
 };
 
-const nextInput = async (n: number) => {
-  await delay(20);
-
-  if (letters.value[n] && isMyTurn.value) {
-    n == 15 ? refresh() : focusInput(n + 1);
-  }
+const nextInput = (n: number) => {
+  nextTick(() => {
+    if (letters.value[n]) {
+      n == 15 ? refresh() : focusFirstEmptyInput();
+    }
+  });
 };
 
 const deleteWord = async () => {
   if (selectedWord.value) {
     selectedWord.value.path.forEach((v) => (letters.value[v] = ''));
 
-    await delay(50);
-
     focusInput(selectedWord.value.path.sort((a, b) => a - b)[0] ?? 0);
-    selectedWord.value = null;
   }
 };
 </script>
