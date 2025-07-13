@@ -55,7 +55,6 @@
 <script setup lang="ts">
 import { delay } from 'es-toolkit';
 import WordTable from '~/components/wordTable.vue';
-import type { APIWordRes, Word } from '~~/shared/types/api/word.post';
 
 const inputRefs = useTemplateRef<HTMLDivElement>('inputsEl');
 const selectedWord = ref<Word | null>();
@@ -63,8 +62,7 @@ const letters = ref<string[]>([]);
 const isMyTurn = ref(true);
 
 const { data, status, refresh, clear } = useFetch<APIWordRes>('/api/word', {
-  method: 'post',
-  body: {
+  query: {
     letters
   },
   immediate: false

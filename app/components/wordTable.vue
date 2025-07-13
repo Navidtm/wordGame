@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Word } from '~~/shared/types/api/word.post';
-
 const selectedWord = defineModel<Word | null>();
 
 const emit = defineEmits<{

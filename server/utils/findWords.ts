@@ -1,4 +1,3 @@
-import { Word } from '~~/shared/types/api/word.post';
 import wordList from '~~/server/data/fa-IR.json';
 
 class TreeNode {

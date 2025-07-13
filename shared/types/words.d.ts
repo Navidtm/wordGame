@@ -5,7 +5,7 @@ export type Word = {
 };
 
 export type WordApi = {
-  body: {
+  query: {
     letters: string[];
   };
 };

@@ -1,10 +1,8 @@
 import { chunk, sortBy } from 'es-toolkit';
 import { findWords } from '../utils/findWords';
-import { WordApi } from '~~/shared/types/api/word.post';
-import { invertBy } from 'es-toolkit/compat';
 
 export default defineEventHandler<WordApi>(async (e) => {
-  const { letters } = await readBody(e);
+  const { letters } = getQuery(e);
 
   const wordList = findWords(chunk(letters, 4));
 
