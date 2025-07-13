@@ -41,14 +41,17 @@
         <UButton @click="del()">پاک</UButton>
       </div>
     </div>
-    <WordTable
-      v-if="data"
-      v-model="selectedWord"
+    <CheckStatus
       :status
-      :words="data.words.slice(0, 20)"
-      @delete-word="deleteWord"
       @refresh="refresh"
-    />
+    >
+      <WordTable
+        v-if="data"
+        v-model="selectedWord"
+        :words="data.words.slice(0, 20)"
+        @delete-word="deleteWord"
+      />
+    </CheckStatus>
   </div>
 </template>
 

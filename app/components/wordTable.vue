@@ -3,11 +3,9 @@ const selectedWord = defineModel<Word | null>();
 
 const emit = defineEmits<{
   deleteWord: [];
-  refresh: [];
 }>();
 
-const { status } = defineProps<{
-  status: ReturnType<Awaited<typeof useFetch>>['status']['value'];
+defineProps<{
   words: Word[];
 }>();
 </script>
@@ -15,40 +13,22 @@ const { status } = defineProps<{
 <template>
   <div class="max-w-lg">
     <div
-      v-if="status == 'success'"
-      class="grid grid-cols-4 gap-5 p-8"
+      v-for="{ score, word, path } in words"
+      :key="word"
     >
       <div
-        v-for="{ score, word, path } in words"
-        :key="word"
+        class=""
+        @click="selectedWord = { score, word, path }"
+        :class="selectedWord?.word == word ? 'text-red-700' : 'text-white'"
       >
-        <div
-          class=""
-          @click="selectedWord = { score, word, path }"
-          :class="selectedWord?.word == word ? 'text-red-700' : 'text-white'"
-        >
-          {{ word }} - {{ score }}
-        </div>
+        {{ word }} - {{ score }}
       </div>
-      <UButton
-        v-if="selectedWord"
-        @click="emit('deleteWord')"
-      >
-        پاک کن
-      </UButton>
     </div>
-    <div
-      v-else-if="status == 'error'"
-      class="text-center flex justify-center items-center gap-4"
+    <UButton
+      v-if="selectedWord"
+      @click="emit('deleteWord')"
     >
-      <div class="">خطا</div>
-      <UButton
-        type="button"
-        color="error"
-        @click="emit('refresh')"
-      >
-        تلاش مچدد
-      </UButton>
-    </div>
+      پاک کن
+    </UButton>
   </div>
 </template>
