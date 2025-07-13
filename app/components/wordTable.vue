@@ -11,7 +11,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="max-w-lg grid grid-cols-4 gap-5 p-8">
+  <div class="grid grid-cols-4 gap-2.5">
     <div
       v-for="{ score, word, path } in words"
       :key="word"
