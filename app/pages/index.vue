@@ -1,5 +1,5 @@
 <template>
-  <div class="flex max-w-md mx-auto justify-around p-12 items-center gap-4 flex-col">
+  <div class="flex max-w-lg mx-auto justify-around p-12 items-center gap-4 flex-col">
     <div class="">
       <div
         ref="inputsEl"
@@ -8,7 +8,7 @@
         <UInput
           v-for="(_, n) in 16"
           :key="n"
-          class="max-w-15 p-1"
+          class="max-w-15 p-1 rounded-md"
           v-model="letters[n]"
           color="info"
           maxlength="1"
@@ -18,33 +18,44 @@
           @input="focusFirstEmptyInput()"
           size="xl"
           :class="{
-            'bg-red-700': selectedWord?.path.includes(n),
-            'bg-indigo-700': selectedWord?.path[0] == n
+            'bg-primary': selectedWord?.path.includes(n),
+            'bg-secondary': selectedWord?.path[0] == n
           }"
         />
       </div>
       <div class="flex w-full *:w-full *:block *:text-center gap-6">
         <UButton @click="refresh()">تایید</UButton>
-        <UButton @click="deleteAll()">پاک</UButton>
+        <UButton
+          color="error"
+          @click="deleteAll()"
+        >
+          پاک
+        </UButton>
       </div>
     </div>
     <CheckStatus
       :status
       @refresh="refresh"
     >
-      <WordTable
+      <div
         v-if="data"
-        v-model="selectedWord"
-        :words="data.words.slice(0, 20)"
-        @delete-word="deleteWord"
-      />
+        class="grid grid-cols-4 gap-2"
+      >
+        <UButton
+          v-for="{ score, word, path } in data.words.slice(0, 20)"
+          :key="word"
+          :color="selectedWord?.word == word ? 'secondary' : 'primary'"
+          @focus="selectedWord = { score, word, path }"
+          @click="deleteWord()"
+        >
+          {{ word }} - {{ score }}
+        </UButton>
+      </div>
     </CheckStatus>
   </div>
 </template>
 
 <script setup lang="ts">
-import WordTable from '~/components/wordTable.vue';
-
 const inputRefs = useTemplateRef<HTMLDivElement>('inputsEl');
 const selectedWord = ref<Word | null>();
 const letters = ref<string[]>(new Array(16).fill(''));
