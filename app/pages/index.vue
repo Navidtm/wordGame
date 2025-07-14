@@ -1,5 +1,5 @@
 <template>
-  <div class="flex max-w-lg mx-auto justify-around p-12 items-center gap-4 flex-col">
+  <div class="flex max-w-xl mx-auto justify-around p-12 items-center gap-4 flex-col">
     <div class="">
       <div
         ref="inputsEl"
@@ -7,27 +7,18 @@
       >
         <UInput
           v-for="n in range(16)"
-          :key="n"
-          class="max-w-15 p-1 rounded-md"
           v-model="letters[n]"
+          :key="n"
+          size="xl"
           color="info"
           maxlength="1"
+          class="max-w-15 p-1 rounded-md"
+          :class="{ 'bg-primary': path.includes(n), 'bg-secondary': path[0] == n }"
           @click="letters[n] = ''"
           @keyup.delete="onDelete(n)"
           @focus="focusInput(n)"
           @input="focusFirstEmptyInput()"
-          size="xl"
-          :class="{ 'bg-primary': path.includes(n), 'bg-secondary': path[0] == n }"
         />
-      </div>
-      <div class="flex w-full *:w-full *:block *:text-center gap-6">
-        <UButton @click="refresh()">تایید</UButton>
-        <UButton
-          color="error"
-          @click="deleteAll()"
-        >
-          پاک
-        </UButton>
       </div>
     </div>
     <div
@@ -42,7 +33,16 @@
           @focus="path = p"
           @click="deleteWord()"
         >
-          {{ word }} - {{ score }}
+          <div class="flex justify-between w-full items-center gap-2">
+            {{ word }}
+            <UButton
+              size="sm"
+              disabled
+              :color="score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error'"
+            >
+              {{ score }}
+            </UButton>
+          </div>
         </UButton>
       </template>
     </div>
