@@ -38,25 +38,31 @@
       @refresh="refresh"
     >
       <div
-        v-if="data"
         class="grid grid-cols-4 gap-2"
+        ref="buttonsEl"
       >
-        <UButton
-          v-for="{ score, word, path } in data.words.slice(0, 20)"
-          :key="word"
-          :color="selectedWord?.word == word ? 'secondary' : 'primary'"
-          @focus="selectedWord = { score, word, path }"
-          @click="deleteWord()"
-        >
-          {{ word }} - {{ score }}
-        </UButton>
+        <template v-if="data">
+          <UButton
+            v-for="{ score, word, path } in data.words.slice(0, 20)"
+            :key="word"
+            :color="selectedWord?.word == word ? 'secondary' : 'primary'"
+            @focus="selectedWord = { score, word, path }"
+            @click="deleteWord()"
+          >
+            {{ word }} - {{ score }}
+          </UButton>
+        </template>
       </div>
     </CheckStatus>
   </div>
 </template>
 
 <script setup lang="ts">
-const inputRefs = useTemplateRef<HTMLDivElement>('inputsEl');
+import { range } from 'es-toolkit';
+
+const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
+const buttonsRef = useTemplateRef<HTMLDivElement>('buttonsEl');
+
 const selectedWord = ref<Word | null>();
 const letters = ref<string[]>(new Array(16).fill(''));
 
@@ -67,7 +73,10 @@ const { data, status, refresh, clear } = useFetch<APIWordRes>('/api/word', {
 });
 
 const focusInput = (n: number) =>
-  (inputRefs.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
+  (inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
+
+const focusButton = (n: number) =>
+  (buttonsRef.value?.children.item(n) as HTMLButtonElement).focus();
 
 const focusFirstEmptyInput = () => {
   nextTick(() => {
@@ -94,4 +103,10 @@ const deleteWord = () => {
   focusFirstEmptyInput();
   selectedWord.value = null;
 };
+
+onKeyStroke(['Escape'], () => deleteAll());
+
+onKeyStroke(range(20).map(String), (e) => {
+  focusButton(+e.key);
+});
 </script>
