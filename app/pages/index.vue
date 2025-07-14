@@ -29,7 +29,7 @@
         <UButton
           v-for="{ score, word, path: p } in data.words.slice(0, 20)"
           :key="word"
-          :color="isEqual(path, p) ? 'secondary' : 'primary'"
+          :color="isEqual(path, p) ? colorButton(score) : 'primary'"
           @focus="path = p"
           @click="deleteWord()"
         >
@@ -38,7 +38,7 @@
             <UButton
               size="sm"
               disabled
-              :color="score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error'"
+              :color="colorButton(score)"
             >
               {{ score }}
             </UButton>
@@ -100,4 +100,6 @@ onKeyStroke(['Escape'], () => deleteAll());
 onKeyStroke(range(20).map(String), (e) => focusButton(+e.key));
 
 onMounted(() => focusInput(0));
+
+const colorButton = (score: number) => (score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error');
 </script>
