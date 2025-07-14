@@ -33,27 +33,22 @@
         </UButton>
       </div>
     </div>
-    <CheckStatus
-      :status
-      @refresh="refresh"
+    <div
+      class="grid grid-cols-4 gap-2"
+      ref="buttonsEl"
     >
-      <div
-        class="grid grid-cols-4 gap-2"
-        ref="buttonsEl"
-      >
-        <template v-if="data">
-          <UButton
-            v-for="{ score, word, path } in data.words.slice(0, 20)"
-            :key="word"
-            :color="selectedWord?.word == word ? 'secondary' : 'primary'"
-            @focus="selectedWord = { score, word, path }"
-            @click="deleteWord()"
-          >
-            {{ word }} - {{ score }}
-          </UButton>
-        </template>
-      </div>
-    </CheckStatus>
+      <template v-if="data">
+        <UButton
+          v-for="{ score, word, path } in data.words.slice(0, 20)"
+          :key="word"
+          :color="selectedWord?.word == word ? 'secondary' : 'primary'"
+          @focus="selectedWord = { score, word, path }"
+          @click="deleteWord()"
+        >
+          {{ word }} - {{ score }}
+        </UButton>
+      </template>
+    </div>
   </div>
 </template>
 
