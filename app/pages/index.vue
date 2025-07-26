@@ -29,6 +29,7 @@
         <UButton
           v-for="{ score, word, path: p } in data.slice(0, 20)"
           :key="word"
+          class="cursor-pointer"
           :color="isEqual(path, p) ? colorButton(score) : 'primary'"
           @focus="path = p"
           @click="deleteWord()"
@@ -37,7 +38,7 @@
             {{ word }}
             <UButton
               size="sm"
-              disabled
+              as="div"
               :color="colorButton(score)"
             >
               {{ score }}
