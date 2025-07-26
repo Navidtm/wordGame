@@ -27,7 +27,7 @@
     >
       <template v-if="data">
         <UButton
-          v-for="{ score, word, path: p } in data.words.slice(0, 20)"
+          v-for="{ score, word, path: p } in data.slice(0, 20)"
           :key="word"
           :color="isEqual(path, p) ? colorButton(score) : 'primary'"
           @focus="path = p"
@@ -50,7 +50,13 @@
 </template>
 
 <script setup lang="ts">
-import { range, isEqual } from 'es-toolkit';
+import { range, isEqual, sortBy, chunk } from 'es-toolkit';
+
+export type Word = {
+  word: string;
+  score: number;
+  path: number[];
+};
 
 const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
 const buttonsRef = useTemplateRef<HTMLDivElement>('buttonsEl');
@@ -58,11 +64,17 @@ const buttonsRef = useTemplateRef<HTMLDivElement>('buttonsEl');
 const path = ref<number[]>([]);
 const letters = ref<string[]>(new Array(16).fill(''));
 
-const { data, refresh, clear } = useFetch<APIWordRes>('/api/word', {
-  query: { letters },
-  watch: false,
-  immediate: false
-});
+const data = ref<Word[]>([]);
+
+const refresh = () => {
+  const wordList = findWords(chunk(letters.value, 4));
+
+  const sortedWordList = sortBy(wordList, ['score', ({ word }) => -word.length])
+    .reverse()
+    .slice(0, 50);
+
+  data.value = sortedWordList;
+};
 
 const focusInput = (n: number) =>
   (inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
@@ -80,7 +92,7 @@ const focusFirstEmptyInput = () => {
 const deleteAll = () => {
   letters.value.fill('');
   path.value = [];
-  clear();
+  data.value = [];
   focusInput(0);
 };
 

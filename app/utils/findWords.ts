@@ -1,4 +1,4 @@
-import wordList from '~~/server/data/fa-IR.json';
+import wordList from '~~/data/fa-IR.json';
 
 class TreeNode {
   children: Map<string, TreeNode> = new Map();
@@ -58,19 +58,19 @@ const directions = [
 export function findWords(board: string[][]): Word[] {
   const tree = new Tree(wordList);
   const m = board.length;
-  const n = board[0].length;
+  const n = board[0]!.length;
   const visited: boolean[][] = Array.from({ length: m }, () => Array(n).fill(false));
   const found: Map<string, number[]> = new Map();
 
   function dfs(x: number, y: number, prefix: string, path: number[]) {
     if (x < 0 || y < 0 || x >= m || y >= n) return;
-    if (visited[x][y]) return;
+    if (visited[x]![y]) return;
 
-    const newPrefix = prefix + board[x][y];
+    const newPrefix = prefix + board[x]![y];
     if (!tree.startsWith(newPrefix)) return;
 
     path.push(x * 4 + y);
-    visited[x][y] = true;
+    visited[x]![y] = true;
 
     if (tree.search(newPrefix)) {
       if (!found.has(newPrefix)) {
@@ -82,7 +82,7 @@ export function findWords(board: string[][]): Word[] {
       dfs(x + dx, y + dy, newPrefix, path);
     }
 
-    visited[x][y] = false;
+    visited[x]![y] = false;
     path.pop();
   }
 
