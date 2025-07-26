@@ -25,7 +25,6 @@ class Tree {
     node.isWord = true;
   }
 
-  // بررسی اینکه آیا پیشوند موجود است یا خیر
   startsWith(prefix: string): boolean {
     let node = this.root;
     for (const ch of prefix) {
@@ -35,7 +34,6 @@ class Tree {
     return true;
   }
 
-  // بررسی اینکه آیا کلمه‌ی کامل وجود دارد
   search(word: string): boolean {
     let node = this.root;
     for (const ch of word) {
@@ -46,7 +44,6 @@ class Tree {
   }
 }
 
-// جهت‌های حرکت (8 جهت مجاور)
 const directions = [
   [-1, -1],
   [-1, 0],
@@ -58,19 +55,12 @@ const directions = [
   [1, 1]
 ] as const;
 
-/**
- * جستجوی همه‌ی کلمات معنی‌دار از جدول
- * @param board  آرایه 4x4 حروف فارسی
- * @param wordList  لیست کلمات فارسی
- * @returns آرایه‌ی کلمات یافته شده
- */
-
 export function findWords(board: string[][]): Word[] {
   const tree = new Tree(wordList);
   const m = board.length;
   const n = board[0].length;
   const visited: boolean[][] = Array.from({ length: m }, () => Array(n).fill(false));
-  const found: Map<string, number[]> = new Map(); // برای حذف تکراری‌ها
+  const found: Map<string, number[]> = new Map();
 
   function dfs(x: number, y: number, prefix: string, path: number[]) {
     if (x < 0 || y < 0 || x >= m || y >= n) return;
@@ -83,7 +73,6 @@ export function findWords(board: string[][]): Word[] {
     visited[x][y] = true;
 
     if (tree.search(newPrefix)) {
-      // فقط اولین مسیر برای هر کلمه را ذخیره می‌کنیم
       if (!found.has(newPrefix)) {
         found.set(newPrefix, [...path]);
       }
