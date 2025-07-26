@@ -11,14 +11,12 @@
   },
   "dependencies": {
     "@nuxt/fonts": "^0.11.4",
-    "@nuxt/ui": "^3.2.0",
+    "@nuxt/ui": "^3.3.0",
     "@tailwindcss/vite": "^4.1.11",
-    "@vueuse/core": "^13.5.0",
-    "@vueuse/nuxt": "^13.5.0",
-    "es-toolkit": "^1.39.6",
-    "nuxt": "^3.17.6",
+    "es-toolkit": "^1.39.8",
+    "nuxt": "^3.17.7",
     "tailwindcss": "^4.1.11",
-    "vue": "^3.5.17",
+    "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   }
 }
