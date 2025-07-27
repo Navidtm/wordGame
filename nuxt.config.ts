@@ -20,10 +20,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'bun',
-    experimental: {
-      openAPI: true
-    }
+    preset: 'static'
   },
 
   vite: {

@@ -1,5 +1,4 @@
 {
   "buildCommand": "bun run build",
-  "outputDirectory": ".output",
-  "framework": "nuxt"
+  "outputDirectory": ".output"
 }
