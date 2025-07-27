@@ -64,7 +64,6 @@ const buttonsRef = useTemplateRef<HTMLDivElement>('buttonsEl');
 
 const path = ref<number[]>([]);
 const letters = ref<string[]>(new Array(16).fill(''));
-
 const data = ref<Word[]>([]);
 
 const refresh = () => {
