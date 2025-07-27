@@ -1,5 +1,5 @@
 <template>
-  <div class="flex max-w-xl mx-auto justify-around p-12 items-center gap-4 flex-col">
+  <div class="flex max-w-xl mx-auto justify-around py-12 items-center gap-4 flex-col">
     <div class="">
       <div
         ref="inputsEl"
@@ -20,19 +20,27 @@
           @input="focusFirstEmptyInput()"
         />
       </div>
+      <div class="flex w-full *:w-full *:block *:text-center gap-6">
+        <UButton @click="deleteWord()">تایید کلمه</UButton>
+        <UButton
+          color="error"
+          @click="deleteAll()"
+        >
+          پاک کردن
+        </UButton>
+      </div>
     </div>
     <div
-      class="grid grid-cols-4 gap-2"
+      class="grid grid-cols-3 md:grid-cols-4 gap-2"
       ref="buttonsEl"
     >
       <template v-if="data">
         <UButton
-          v-for="{ score, word, path: p } in data.slice(0, 20)"
+          v-for="{ score, word, path: p } in data.slice(0, 12)"
           :key="word"
           class="cursor-pointer"
           :color="isEqual(path, p) ? colorButton(score) : 'primary'"
           @focus="path = p"
-          @click="deleteWord()"
         >
           <div class="flex justify-between w-full items-center gap-2">
             {{ word }}
