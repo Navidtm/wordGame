@@ -19,16 +19,16 @@
 							'bg-secondary': selectedPath[0] == n,
 						}"
 						@click="letters[n] = ''"
-						@keyup.delete="onDelete(n)"
+						@keyup.delete="deleteWord([n])"
 						@focus="focusFirstEmptyInput()"
 						@input="focusFirstEmptyInput()"
 					/>
 				</div>
 				<div class="flex w-full *:w-full *:block *:text-center gap-6">
-					<UButton @click="deleteWord()">تایید</UButton>
+					<UButton @click="deleteWord(selectedPath)">تایید</UButton>
 					<UButton
 						color="error"
-						@click="deleteAll()"
+						@click="deleteWord(range(16))"
 					>
 						پاک
 					</UButton>
@@ -36,11 +36,11 @@
 			</div>
 			<div class="grid grid-cols-3 gap-2 min-h-40">
 				<UButton
-					v-for="({ score, word, path }, i) in data"
+					v-for="{ score, word, path } in findWords(letters)"
 					:key="word"
 					class="cursor-pointer max-h-10"
 					type="button"
-					:color="isEqual(path, selectedPath) ? colorButton(score) : 'primary'"
+					:color="isEqual(path, selectedPath) ? 'neutral' : 'primary'"
 					@click="selectedPath = path"
 				>
 					<div class="flex justify-between w-full items-center gap-2">
@@ -48,7 +48,7 @@
 						<UButton
 							size="sm"
 							as="div"
-							:color="colorButton(score)"
+							:color="score > 6 ? 'success' : score > 4 ? 'warning' : 'error'"
 						>
 							{{ score }}
 						</UButton>
@@ -60,14 +60,13 @@
 </template>
 
 <script setup lang="ts">
-import { range, isEqual } from 'es-toolkit';
+import { isEqual, range } from 'es-toolkit';
 import { isEmpty } from 'es-toolkit/compat';
 
 const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
 
 const selectedPath = ref<number[]>([]);
 const letters = ref<string[]>(Array(16));
-const data = computed(() => findWords(letters.value));
 
 const focusFirstEmptyInput = () => {
 	nextTick(() => {
@@ -80,29 +79,14 @@ const focusFirstEmptyInput = () => {
 	});
 };
 
-const deleteAll = () => {
-	letters.value.fill('');
+const deleteWord = (path: number[]) => {
+	path.forEach((n) => (letters.value[letters.value[n] ? n : n - 1] = ''));
 	selectedPath.value = [];
 	focusFirstEmptyInput();
 };
 
-const onDelete = (n: number) => {
-	if (n == 0) return;
-	if (!letters.value[n]) letters.value[n - 1] = '';
-	letters.value[n] = '';
-	focusFirstEmptyInput();
-};
-
-const deleteWord = () => {
-	selectedPath.value.forEach((v) => onDelete(v));
-	selectedPath.value = [];
-};
-
-onKeyStroke(['Control'], () => deleteAll());
-onKeyStroke(['Enter'], () => deleteWord());
+onKeyStroke(['Control'], () => deleteWord(range(16)));
+onKeyStroke(['Enter'], () => deleteWord(selectedPath.value));
 
 onMounted(() => focusFirstEmptyInput());
-
-const colorButton = (score: number) =>
-	score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error';
 </script>
