@@ -19,7 +19,7 @@
 							'bg-secondary': selectedPath[0] == n,
 						}"
 						@click="letters[n] = ''"
-						@keyup.delete="deleteWord([n])"
+						@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
 						@focus="focusFirstEmptyInput()"
 						@input="focusFirstEmptyInput()"
 					/>
@@ -80,7 +80,7 @@ const focusFirstEmptyInput = () => {
 };
 
 const deleteWord = (path: number[]) => {
-	path.forEach((n) => (letters.value[letters.value[n] ? n : n - 1] = ''));
+	path.forEach((n) => (letters.value[n] = ''));
 	selectedPath.value = [];
 	focusFirstEmptyInput();
 };
