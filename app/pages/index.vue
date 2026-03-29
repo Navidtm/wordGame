@@ -1,125 +1,108 @@
 <template>
-  <div class="flex max-w-xl mx-auto justify-around py-12 items-center gap-4 flex-col">
-    <div class="">
-      <div
-        ref="inputsEl"
-        class="grid grid-cols-4 mb-2"
-      >
-        <UInput
-          v-for="n in range(16)"
-          v-model="letters[n]"
-          :key="n"
-          size="xl"
-          color="info"
-          maxlength="1"
-          class="max-w-15 p-1 rounded-md"
-          :class="{ 'bg-primary': path.includes(n), 'bg-secondary': path[0] == n }"
-          @click="letters[n] = ''"
-          @keyup.delete="onDelete(n)"
-          @focus="focusInput(n)"
-          @input="focusFirstEmptyInput()"
-        />
-      </div>
-      <div class="flex w-full *:w-full *:block *:text-center gap-6">
-        <UButton @click="deleteWord()">تایید کلمه</UButton>
-        <UButton
-          color="error"
-          @click="deleteAll()"
-        >
-          پاک کردن
-        </UButton>
-      </div>
-    </div>
-    <div
-      class="grid grid-cols-3 md:grid-cols-4 gap-2"
-      ref="buttonsEl"
-    >
-      <template v-if="data">
-        <UButton
-          v-for="{ score, word, path: p } in data.slice(0, 12)"
-          :key="word"
-          class="cursor-pointer"
-          :color="isEqual(path, p) ? colorButton(score) : 'primary'"
-          @focus="path = p"
-        >
-          <div class="flex justify-between w-full items-center gap-2">
-            {{ word }}
-            <UButton
-              size="sm"
-              as="div"
-              :color="colorButton(score)"
-            >
-              {{ score }}
-            </UButton>
-          </div>
-        </UButton>
-      </template>
-    </div>
-  </div>
+	<div class="flex items-center justify-center py-12 h-dvh">
+		<div class="flex max-w-xl justify-around items-center gap-4 flex-col">
+			<div class="">
+				<div
+					ref="inputsEl"
+					class="grid grid-cols-4 mb-2"
+				>
+					<UInput
+						v-for="n in range(16)"
+						v-model="letters[n]"
+						:key="n"
+						size="xl"
+						color="info"
+						maxlength="1"
+						class="max-w-15 p-1 rounded-md"
+						:class="{
+							'bg-primary': selectedPath.includes(n),
+							'bg-secondary': selectedPath[0] == n,
+						}"
+						@click="letters[n] = ''"
+						@keyup.delete="onDelete(n)"
+						@focus="focusFirstEmptyInput()"
+						@input="focusFirstEmptyInput()"
+					/>
+				</div>
+				<div class="flex w-full *:w-full *:block *:text-center gap-6">
+					<UButton @click="deleteWord()">تایید</UButton>
+					<UButton
+						color="error"
+						@click="deleteAll()"
+					>
+						پاک
+					</UButton>
+				</div>
+			</div>
+			<div class="grid grid-cols-3 gap-2 min-h-40">
+				<UButton
+					v-for="({ score, word, path }, i) in data"
+					:key="word"
+					class="cursor-pointer max-h-10"
+					type="button"
+					:color="isEqual(path, selectedPath) ? colorButton(score) : 'primary'"
+					@click="selectedPath = path"
+				>
+					<div class="flex justify-between w-full items-center gap-2">
+						{{ word }}
+						<UButton
+							size="sm"
+							as="div"
+							:color="colorButton(score)"
+						>
+							{{ score }}
+						</UButton>
+					</div>
+				</UButton>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { range, isEqual, sortBy, chunk } from 'es-toolkit';
-
-export type Word = {
-  word: string;
-  score: number;
-  path: number[];
-};
+import { range, isEqual } from 'es-toolkit';
+import { isEmpty } from 'es-toolkit/compat';
 
 const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
-const buttonsRef = useTemplateRef<HTMLDivElement>('buttonsEl');
 
-const path = ref<number[]>([]);
-const letters = ref<string[]>(new Array(16).fill(''));
-const data = ref<Word[]>([]);
-
-const refresh = () => {
-  const wordList = findWords(chunk(letters.value, 4));
-
-  const sortedWordList = sortBy(wordList, ['score', ({ word }) => -word.length])
-    .reverse()
-    .slice(0, 50);
-
-  data.value = sortedWordList;
-};
-
-const focusInput = (n: number) =>
-  (inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
-
-const focusButton = (n: number) =>
-  (buttonsRef.value?.children.item(n) as HTMLButtonElement).focus();
+const selectedPath = ref<number[]>([]);
+const letters = ref<string[]>(Array(16));
+const data = computed(() => findWords(letters.value));
 
 const focusFirstEmptyInput = () => {
-  nextTick(() => {
-    const firstIndex = letters.value.findIndex((v) => v == '');
-    firstIndex >= 0 ? focusInput(firstIndex) : refresh();
-  });
+	nextTick(() => {
+		const firstIndex = letters.value.findIndex(isEmpty);
+		if (firstIndex > -1) {
+			const input = inputsRef.value?.children.item(firstIndex)
+				?.firstChild as HTMLInputElement;
+			input.focus();
+		}
+	});
 };
 
 const deleteAll = () => {
-  letters.value.fill('');
-  path.value = [];
-  data.value = [];
-  focusInput(0);
+	letters.value.fill('');
+	selectedPath.value = [];
+	focusFirstEmptyInput();
 };
 
 const onDelete = (n: number) => {
-  if (n == 0) return;
-  if (!letters.value[n]) letters.value[n - 1] = '';
-  focusInput(n - 1);
+	if (n == 0) return;
+	if (!letters.value[n]) letters.value[n - 1] = '';
+	letters.value[n] = '';
+	focusFirstEmptyInput();
 };
 
 const deleteWord = () => {
-  path.value.forEach((v) => (letters.value[v] = ''));
-  focusFirstEmptyInput();
-  path.value = [];
+	selectedPath.value.forEach((v) => onDelete(v));
+	selectedPath.value = [];
 };
 
-onKeyStroke(['Escape'], () => deleteAll());
-onKeyStroke(range(20).map(String), (e) => focusButton(+e.key));
+onKeyStroke(['Control'], () => deleteAll());
+onKeyStroke(['Enter'], () => deleteWord());
 
-onMounted(() => focusInput(0));
+onMounted(() => focusFirstEmptyInput());
 
-const colorButton = (score: number) => (score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error');
+const colorButton = (score: number) =>
+	score >= 7 ? 'success' : score >= 5 ? 'warning' : 'error';
 </script>
