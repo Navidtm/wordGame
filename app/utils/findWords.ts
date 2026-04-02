@@ -5,6 +5,7 @@ export type Word = {
 	word: string;
 	score: number;
 	path: number[];
+	color: 'success' | 'warning' | 'error';
 };
 class TreeNode {
 	children: Map<string, TreeNode> = new Map();
@@ -108,7 +109,12 @@ export function findWords(letters: string[]): Word[] {
 		score: wordToScore(word),
 	}));
 
-	return sortBy(result, ['score', ({ word }) => -word.length])
+	const sorted = sortBy(result, ['score', ({ word }) => -word.length])
 		.reverse()
 		.slice(0, 12);
+
+	return sorted.map((v) => ({
+		...v,
+		color: v.score > 6 ? 'success' : v.score > 4 ? 'warning' : 'error',
+	}));
 }
