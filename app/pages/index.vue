@@ -18,10 +18,9 @@
 							'bg-primary': selectedPath.includes(n),
 							'bg-secondary': selectedPath[0] == n,
 						}"
-						@click="letters[n] = ''"
+						@click="deleteWord([n])"
 						@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
-						@focus="focusFirstEmptyInput()"
-						@input="focusFirstEmptyInput()"
+						@input="nextTick(() => focusFirstEmptyInput(letters.indexOf('')))"
 					/>
 				</div>
 				<div class="flex w-full *:w-full *:block *:text-center gap-6">
@@ -61,32 +60,26 @@
 
 <script setup lang="ts">
 import { isEqual, range } from 'es-toolkit';
-import { isEmpty } from 'es-toolkit/compat';
 
 const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
 
 const selectedPath = ref<number[]>([]);
-const letters = ref<string[]>(Array(16));
+const letters = ref<string[]>(Array(16).fill(''));
 
-const focusFirstEmptyInput = () => {
-	nextTick(() => {
-		const firstIndex = letters.value.findIndex(isEmpty);
-		if (firstIndex > -1) {
-			const input = inputsRef.value?.children.item(firstIndex)
-				?.firstChild as HTMLInputElement;
-			input.focus();
-		}
-	});
+const focusFirstEmptyInput = (n: number) => {
+	if (n < 0) return;
+	(inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
 };
 
 const deleteWord = (path: number[]) => {
+	if (path.length == 0) return;
 	path.forEach((n) => (letters.value[n] = ''));
 	selectedPath.value = [];
-	focusFirstEmptyInput();
+	focusFirstEmptyInput(Math.min(...path));
 };
 
 onKeyStroke(['Control'], () => deleteWord(range(16)));
 onKeyStroke(['Enter'], () => deleteWord(selectedPath.value));
 
-onMounted(() => focusFirstEmptyInput());
+onMounted(() => focusFirstEmptyInput(0));
 </script>
