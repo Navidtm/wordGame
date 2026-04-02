@@ -2,14 +2,13 @@
 	<div class="flex items-center justify-center flex-col py-12 h-dvh gap-3">
 		<div
 			ref="inputsEl"
-			class="grid grid-cols-4 bg-blue-500/60 rounded-xl p-1 gap-2"
+			class="grid grid-cols-4 bg-primary/60 rounded-md p-2 gap-2"
 		>
 			<UInput
 				v-for="n in range(16)"
 				v-model="letters[n]"
 				:key="n"
-				size="xl"
-				class="max-w-12 rounded-md border border-black"
+				class="rounded-md border border-black/30 w-14 h-12 *:h-full text-center"
 				maxlength="1"
 				:variant="path[0] == n ? 'none' : path.includes(n) ? 'soft' : 'outline'"
 				@click="deleteWord([n])"
@@ -17,7 +16,6 @@
 				@input="nextTick(() => focusInput(letters.indexOf('')))"
 			/>
 		</div>
-
 		<div class="w-full *:w-full *:block max-w-60">
 			<UButton @click="deleteWord(range(16))">پاک</UButton>
 		</div>
