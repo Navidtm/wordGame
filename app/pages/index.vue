@@ -21,16 +21,14 @@
 		</div>
 		<div class="grid grid-cols-3 gap-2 min-h-48">
 			<UButton
-				v-for="{ color, word, path: p, score } in findWords(letters)"
+				v-for="({ color, word, path: p, score }, i) in words"
 				:key="word"
 				:color="isEqual(path, p) ? 'neutral' : 'primary'"
-				@click="isEqual(path, p) ? deleteWord(p) : (path = p)"
+				@click="isEqual(path, p) ? deleteWord(p) : (focusedButton = i)"
 				class="flex justify-between w-full items-center gap-2 max-h-10"
 			>
 				{{ word }}
-				<UButton :color>
-					{{ score }}
-				</UButton>
+				<UButton :color>{{ score }}</UButton>
 			</UButton>
 		</div>
 	</div>
@@ -41,24 +39,26 @@ import { isEqual, range } from 'es-toolkit';
 
 const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
 
-const path = ref<number[]>([]);
 const letters = ref<string[]>(Array(16).fill(''));
+const focusedButton = ref(0);
+
+const words = computed(() => findWords(letters.value));
+const path = computed(() => words.value[focusedButton.value]?.path ?? []);
 
 const focusInput = (n: number) => {
-	if (n < 0) path.value = findWords(letters.value)[0]?.path ?? [];
-	else
+	if (n >= 0 && n <= 16)
 		(inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
 };
 
 const deleteWord = (p: number[]) => {
-	if (p.length == 0) return;
 	p.forEach((n) => (letters.value[n] = ''));
-	path.value = [];
+	focusedButton.value = 0;
 	focusInput(Math.min(...p));
 };
 
 onKeyStroke(['Control'], () => deleteWord(range(16)));
 onKeyStroke(['Enter'], () => deleteWord(path.value));
+onKeyStroke(['Shift'], () => focusedButton.value++);
 
 onMounted(() => focusInput(0));
 </script>
