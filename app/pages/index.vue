@@ -21,14 +21,14 @@
 		</div>
 		<div class="grid grid-cols-3 gap-2 min-h-48">
 			<UButton
-				v-for="({ color, word, path: p, score }, i) in words"
+				v-for="([word, p, score], i) in words"
 				:key="word"
 				:color="isEqual(path, p) ? 'neutral' : 'primary'"
 				@click="isEqual(path, p) ? deleteWord(p) : (focusedButton = i)"
 				class="flex justify-between w-full items-center gap-2 max-h-10"
 			>
 				{{ word }}
-				<UButton :color>{{ score }}</UButton>
+				<UButton :color="scoreToColor(score)">{{ score }}</UButton>
 			</UButton>
 		</div>
 	</div>
@@ -43,7 +43,7 @@ const letters = ref<string[]>(Array(16).fill(''));
 const focusedButton = ref(0);
 
 const words = computed(() => findWords(letters.value));
-const path = computed(() => words.value[focusedButton.value]?.path ?? []);
+const path = computed(() => words.value[focusedButton.value]?.[1] ?? []);
 
 const focusInput = (n: number) => {
 	if (n >= 0 && n <= 16)

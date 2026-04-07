@@ -1,12 +1,6 @@
-import { chunk, sortBy } from 'es-toolkit';
+import { chunk } from 'es-toolkit';
 import wordList from '~~/data/fa-IR.json';
 
-export type Word = {
-	word: string;
-	score: number;
-	path: number[];
-	color: 'success' | 'warning' | 'error';
-};
 class TreeNode {
 	children: Map<string, TreeNode> = new Map();
 	isWord: boolean = false;
@@ -62,7 +56,7 @@ const directions = [
 	[1, 1],
 ] as const;
 
-export function findWords(letters: string[]): Word[] {
+export function findWords(letters: string[]): [string, number[], number][] {
 	if (letters.filter(Boolean).length < 16) return [];
 	const board = chunk(letters, 4);
 	const tree = new Tree(wordList);
@@ -103,18 +97,10 @@ export function findWords(letters: string[]): Word[] {
 		}
 	}
 
-	const result = Array.from(found.entries()).map(([word, path]) => ({
-		word,
-		path,
-		score: wordToScore(word),
-	}));
-
-	const sorted = sortBy(result, ['score', ({ word }) => -word.length])
-		.reverse()
+	return found
+		.entries()
+		.toArray()
+		.map<[string, number[], number]>((v) => [...v, wordToScore(v[0])])
+		.sort((a, b) => a[2] - b[2])
 		.slice(0, 12);
-
-	return sorted.map((v) => ({
-		...v,
-		color: v.score > 6 ? 'success' : v.score > 4 ? 'warning' : 'error',
-	}));
 }
