@@ -101,6 +101,6 @@ export function findWords(letters: string[]): [string, number[], number][] {
 		.entries()
 		.toArray()
 		.map<[string, number[], number]>((v) => [...v, wordToScore(v[0])])
-		.sort((a, b) => a[2] - b[2])
+		.sort((a, b) => (b[2] == a[2] ? a[1].length - b[1].length : b[2] - a[2]))
 		.slice(0, 12);
 }
