@@ -1,12 +1,11 @@
 <template>
 	<div class="flex items-center justify-center flex-col py-12 h-dvh gap-3">
-		<div
-			ref="inputsEl"
-			class="grid grid-cols-4 bg-primary/60 rounded-md p-2 gap-2"
-		>
+		<div class="grid grid-cols-4 bg-primary/60 rounded-md p-2 gap-2">
 			<UInput
 				v-for="n in range(16)"
 				v-model="letters[n]"
+				ref="inputs"
+				ref_for
 				:key="n"
 				class="rounded-md border border-black/30 w-14 h-12 *:h-full text-center"
 				maxlength="1"
@@ -37,7 +36,7 @@
 <script setup lang="ts">
 import { isEqual, range } from 'es-toolkit';
 
-const inputsRef = useTemplateRef<HTMLDivElement>('inputsEl');
+const inputs = useTemplateRef('inputs');
 
 const letters = ref<string[]>(Array(16).fill(''));
 const focusedButton = ref(0);
@@ -46,8 +45,7 @@ const words = computed(() => findWords(letters.value));
 const path = computed(() => words.value[focusedButton.value]?.[1] ?? []);
 
 const focusInput = (n: number) => {
-	if (n >= 0 && n <= 16)
-		(inputsRef.value?.children.item(n)?.firstChild as HTMLInputElement).focus();
+	inputs.value?.[n]?.inputRef?.focus();
 };
 
 const deleteWord = (p: number[]) => {
