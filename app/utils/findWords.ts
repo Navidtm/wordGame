@@ -1,16 +1,16 @@
-import { chunk } from 'es-toolkit';
+import { chunk, fill, range } from 'es-toolkit';
 import wordList from '~~/data/fa-IR.json';
 
-class TreeNode {
-	children: Map<string, TreeNode> = new Map();
+class Node {
+	children = new Map<string, Node>();
 	isWord: boolean = false;
 }
 
 class Tree {
-	root: TreeNode = new TreeNode();
+	root = new Node();
 
-	constructor(words: string[]) {
-		for (const word of words) {
+	constructor() {
+		for (const word of wordList) {
 			this.insert(word);
 		}
 	}
@@ -19,7 +19,7 @@ class Tree {
 		let node = this.root;
 		for (const ch of word) {
 			if (!node.children.has(ch)) {
-				node.children.set(ch, new TreeNode());
+				node.children.set(ch, new Node());
 			}
 			node = node.children.get(ch)!;
 		}
@@ -45,30 +45,17 @@ class Tree {
 	}
 }
 
-const directions = [
-	[-1, -1],
-	[-1, 0],
-	[-1, 1],
-	[0, -1],
-	[0, 1],
-	[1, -1],
-	[1, 0],
-	[1, 1],
-] as const;
+export const findWords = (letters: string[]): [string, number[], number][] => {
+	if (letters.filter(Boolean).length < 4 * 4) return [];
 
-export function findWords(letters: string[]): [string, number[], number][] {
-	if (letters.filter(Boolean).length < 16) return [];
 	const board = chunk(letters, 4);
-	const tree = new Tree(wordList);
-	const m = board.length;
-	const n = board[0]!.length;
-	const visited: boolean[][] = Array.from({ length: m }, () =>
-		Array(n).fill(false),
-	);
-	const found: Map<string, number[]> = new Map();
+	const tree = new Tree();
 
-	function dfs(x: number, y: number, prefix: string, path: number[]) {
-		if (x < 0 || y < 0 || x >= m || y >= n) return;
+	const visited = chunk(fill(Array(4 * 4), false), 4);
+	const found = new Map<string, number[]>();
+
+	const dfs = (x: number, y: number, prefix: string, path: number[]) => {
+		if (x < 0 || y < 0 || x >= 4 || y >= 4) return;
 		if (visited[x]![y]) return;
 
 		const newPrefix = prefix + board[x]![y];
@@ -77,25 +64,19 @@ export function findWords(letters: string[]): [string, number[], number][] {
 		path.push(x * 4 + y);
 		visited[x]![y] = true;
 
-		if (tree.search(newPrefix)) {
-			if (!found.has(newPrefix)) {
-				found.set(newPrefix, [...path]);
-			}
+		if (tree.search(newPrefix) && !found.has(newPrefix)) {
+			found.set(newPrefix, [...path]);
 		}
 
-		for (const [dx, dy] of directions) {
-			dfs(x + dx, y + dy, newPrefix, path);
-		}
+		range(9).forEach((n) =>
+			dfs(x + Math.floor(n / 3) - 1, y + ((n % 3) - 1), newPrefix, path),
+		);
 
 		visited[x]![y] = false;
 		path.pop();
-	}
+	};
 
-	for (let i = 0; i < m; i++) {
-		for (let j = 0; j < n; j++) {
-			dfs(i, j, '', []);
-		}
-	}
+	range(16).forEach((n) => dfs(Math.floor(n / 4), n % 4, '', []));
 
 	return found
 		.entries()
@@ -103,4 +84,4 @@ export function findWords(letters: string[]): [string, number[], number][] {
 		.map<[string, number[], number]>((v) => [...v, wordToScore(v[0])])
 		.sort((a, b) => (b[2] == a[2] ? a[1].length - b[1].length : b[2] - a[2]))
 		.slice(0, 12);
-}
+};
