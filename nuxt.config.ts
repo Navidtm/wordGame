@@ -2,42 +2,55 @@
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-05-15',
-  devtools: { enabled: true },
+	compatibilityDate: '2025-05-15',
+	devtools: { enabled: true },
 
-  modules: ['@nuxt/ui', '@vueuse/nuxt'],
+	modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxt/test-utils'],
 
-  ssr: false,
+	ssr: false,
 
-  css: ['~/assets/css/main.css'],
+	css: ['~/assets/css/main.css'],
 
-  devServer: {
-    port: 3001
-  },
+	devServer: {
+		port: 3001,
+	},
 
-  future: {
-    compatibilityVersion: 4
-  },
+	experimental: {
+		viteEnvironmentApi: true,
+	},
 
-  nitro: {
-    preset: 'static'
-  },
+	future: {
+		compatibilityVersion: 4,
+	},
 
-  vite: {
-    plugins: [tailwindcss()]
-  },
+	nitro: {
+		preset: 'static',
+	},
 
-  fonts: {
-    provider: 'local',
-    assets: {
-      strategy: 'public'
-    },
-    families: [
-      {
-        provider: 'local',
-        name: 'iransans',
-        weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
-      }
-    ]
-  }
+	ui: {
+		colorMode: false,
+	},
+
+	icon: false,
+
+	vite: {
+		plugins: [tailwindcss()],
+		optimizeDeps: {
+			include: ['es-toolkit'],
+		},
+	},
+
+	fonts: {
+		provider: 'local',
+		assets: {
+			strategy: 'public',
+		},
+		families: [
+			{
+				provider: 'local',
+				name: 'iransans',
+				weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+			},
+		],
+	},
 });
