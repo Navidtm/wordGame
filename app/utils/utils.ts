@@ -49,6 +49,3 @@ export const wordToScore = (word: string): number => {
 	}
 	return score;
 };
-
-export const scoreToColor = (score: number) =>
-	score > 6 ? 'success' : score > 4 ? 'warning' : 'error';
