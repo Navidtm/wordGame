@@ -1,11 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
 	devtools: { enabled: true },
 
-	modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxt/test-utils'],
+	modules: ['@vueuse/nuxt', '@nuxt/test-utils', '@unocss/nuxt', '@nuxt/fonts'],
 
 	ssr: false,
 
@@ -17,24 +16,11 @@ export default defineNuxtConfig({
 
 	experimental: {
 		viteEnvironmentApi: true,
+		typescriptPlugin: true,
+		typedPages: true,
 	},
-
-	future: {
-		compatibilityVersion: 4,
-	},
-
-	nitro: {
-		preset: 'static',
-	},
-
-	ui: {
-		colorMode: false,
-	},
-
-	icon: false,
 
 	vite: {
-		plugins: [tailwindcss()],
 		optimizeDeps: {
 			include: ['es-toolkit'],
 		},

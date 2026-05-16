@@ -1,34 +1,47 @@
 <template>
-	<div class="flex items-center justify-center flex-col py-12 h-dvh gap-3">
+	<div
+		class="flex items-center justify-center flex-col py-12 h-dvh gap-3 text-white"
+	>
 		<div class="grid grid-cols-4 bg-primary/60 rounded-md p-2 gap-2">
-			<UInput
+			<input
 				v-for="n in range(16)"
 				v-model="letters[n]"
 				ref="inputs"
 				ref_for
 				:key="n"
-				class="rounded-md border border-black/30 w-14 h-12 *:h-full text-center"
+				class="rounded-md border border-black/30 w-14 h-12 text-center transition-all"
+				:class="
+					path[0] == n
+						? 'bg-gray-400'
+						: path.includes(n)
+							? 'bg-gray-500'
+							: 'bg-gray-600'
+				"
 				maxlength="1"
-				:variant="path[0] == n ? 'none' : path.includes(n) ? 'soft' : 'outline'"
 				@click="deleteWord([n])"
 				@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
 				@input="nextTick(() => focusInput(letters.indexOf('')))"
 			/>
 		</div>
-		<div class="w-full *:w-full *:block max-w-60">
-			<UButton @click="deleteWord(range(16))">پاک</UButton>
+		<div class="w-full max-w-62">
+			<button
+				class="w-full block bg-red-700 rounded-md py-2 hover:bg-red-600 transition-all cursor-pointer"
+				@click="deleteWord(range(16))"
+			>
+				پاک
+			</button>
 		</div>
-		<div class="grid grid-cols-3 gap-2 min-h-48">
-			<UButton
+		<div class="grid grid-cols-3 gap-2">
+			<button
 				v-for="([word, p, score], i) in words"
 				:key="word"
-				:color="isEqual(path, p) ? 'neutral' : 'primary'"
+				:class="isEqual(path, p) ? 'bg-gray-800' : 'bg-gray-700'"
 				@click="isEqual(path, p) ? deleteWord(p) : (focusedButton = i)"
-				class="flex justify-between w-full items-center gap-2 max-h-10"
+				class="flex justify-between w-full items-center gap-2 max-h-10 p-3 rounded-md transition-all text-sm cursor-pointer"
 			>
 				{{ word }}
-				<UButton :color="scoreToColor(score)">{{ score }}</UButton>
-			</UButton>
+				<div :color="scoreToColor(score)">{{ score }}</div>
+			</button>
 		</div>
 	</div>
 </template>
@@ -45,7 +58,7 @@ const words = computed(() => findWords(letters.value));
 const path = computed(() => words.value[focusedButton.value]?.[1] ?? []);
 
 const focusInput = (n: number) => {
-	inputs.value?.[n]?.inputRef?.focus();
+	inputs.value?.[n]?.focus();
 };
 
 const deleteWord = (p: number[]) => {
