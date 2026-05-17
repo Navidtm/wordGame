@@ -18,9 +18,7 @@ onMounted(() => focus(0));
 watch(letters.value, (v) => focus(v.indexOf('')));
 </script>
 <template>
-	<div
-		class="grid grid-cols-4 bg-primary/60 rounded-lg p-4 gap-2 w-fit mx-auto"
-	>
+	<div class="grid grid-cols-4 rounded-lg p-4 gap-2 w-fit mx-auto">
 		<input
 			v-for="n in table"
 			v-model="letters[n]"
