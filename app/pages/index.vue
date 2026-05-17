@@ -9,27 +9,30 @@ const focusedButton = ref(0);
 const words = computed(() => findWords(letters.value));
 const path = computed(() => words.value[focusedButton.value]?.[1] ?? []);
 
-const focusInput = (n: number) => inputs.value?.[n]?.focus();
+const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 
-const deleteWord = (p: number[]) => {
-	p.forEach((n) => (letters.value[n] = ''));
-	focusedButton.value = 0;
-	focusInput(Math.min(...p));
-};
-
-const convertToPersian = (n: number) => {
+const parseInput = (n: number) => {
 	const char = letters.value[n]!;
 	if (persianMap[char]) letters.value[n] = persianMap[char];
 
-	if (/[ا-ی]/.test(letters.value[n]!)) focusInput(letters.value.indexOf(''));
-	else letters.value[n] = '';
+	if (!/[ا-ی]/.test(letters.value[n]!)) letters.value[n] = '';
 };
+
+watch(
+	letters.value,
+	() => {
+		const emptyLetterIdx = letters.value.indexOf('');
+		if (emptyLetterIdx >= 0) {
+			inputs.value?.[emptyLetterIdx]?.focus();
+			focusedButton.value = 0;
+		}
+	},
+	{ immediate: true },
+);
 
 onKeyStroke(['Control'], () => deleteWord(range(16)));
 onKeyStroke(['Enter'], () => deleteWord(path.value));
 onKeyStroke(['Shift'], () => focusedButton.value++);
-
-onMounted(() => focusInput(0));
 </script>
 <template>
 	<div class="flex items-center justify-center flex-col py-12 h-dvh gap-3">
@@ -45,7 +48,7 @@ onMounted(() => focusInput(0));
 				maxlength="1"
 				@click="deleteWord([n])"
 				@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
-				@input="nextTick(() => convertToPersian(n))"
+				@input="nextTick(() => parseInput(n))"
 			/>
 		</div>
 		<UIDeleteButton @click="deleteWord(range(16))" />
