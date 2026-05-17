@@ -1,53 +1,42 @@
 export const pathToWord = (path: number[], letters: string[]) =>
 	path.map((v) => letters[v]).join('');
 
-export const wordToScore = (word: string): number => {
-	let score = 0;
-	for (let i = 0; i < word.length; i++) {
-		switch (word[i]) {
-			case 'ه':
-			case 'س':
-			case 'ی':
-			case 'ب':
-			case 'ل':
-			case 'ا':
-			case 'ت':
-			case 'ن':
-			case 'م':
-			case 'ر':
-			case 'د':
-			case 'و':
-				score += 1;
-				break;
+export const wordToScore = (word: string): number =>
+	word.split('').reduce((a, c) => a + (scoreMap[c] ?? 0), 0);
 
-			case 'پ':
-			case 'ز':
-			case 'ع':
-			case 'ش':
-			case 'ک':
-			case 'گ':
-			case 'خ':
-			case 'ق':
-			case 'ف':
-			case 'ج':
-				score += 2;
-				break;
-
-			case 'ظ':
-			case 'غ':
-			case 'ض':
-			case 'ص':
-			case 'چ':
-			case 'ذ':
-			case 'ط':
-			case 'ث':
-			case 'ژ':
-			case 'ح':
-				score += 3;
-				break;
-		}
-	}
-	return score;
+const scoreMap: Record<string, number> = {
+	ه: 1,
+	س: 1,
+	ی: 1,
+	ب: 1,
+	ل: 1,
+	ا: 1,
+	ت: 1,
+	ن: 1,
+	م: 1,
+	ر: 1,
+	د: 1,
+	و: 1,
+	پ: 2,
+	ز: 2,
+	ع: 2,
+	ش: 2,
+	ک: 2,
+	گ: 2,
+	خ: 2,
+	ق: 2,
+	ف: 2,
+	ج: 2,
+	ظ: 3,
+	غ: 3,
+	ض: 3,
+	ص: 3,
+	چ: 3,
+	ذ: 3,
+	ط: 3,
+	ث: 3,
+	ژ: 3,
+	ح: 3,
 };
 
 export const persianMap: Record<string, string> = {
