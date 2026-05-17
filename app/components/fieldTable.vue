@@ -22,6 +22,9 @@ watch(letters.value, (v) => {
 	const idx = v.indexOf('');
 	if (idx >= 0) inputs.value?.[idx]?.focus();
 });
+
+onKeyStroke(['Control'], () => letters.value.fill(''));
+onKeyStroke(['Enter'], () => path.forEach(deleteChar));
 </script>
 <template>
 	<div
@@ -34,7 +37,7 @@ watch(letters.value, (v) => {
 			ref_for
 			:key="n"
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
-			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
+			:class="path.includes(n) && letters[n] ? 'bg-gray-700' : 'bg-gray-800'"
 			maxlength="1"
 			@click="deleteChar(n)"
 			@keyup.delete="deleteChar(letters[n] ? n : n - 1)"
