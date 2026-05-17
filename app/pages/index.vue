@@ -48,30 +48,16 @@ onMounted(() => focusInput(0));
 				@input="nextTick(() => convertToPersian(n))"
 			/>
 		</div>
-		<div class="w-full max-w-62">
-			<button
-				class="w-full block bg-red-700/80 rounded-md py-2 hover:opacity-80 transition-all cursor-pointer"
-				@click="deleteWord(range(16))"
-			>
-				پاک
-			</button>
-		</div>
+		<UIDeleteButton @click="deleteWord(range(16))" />
 		<div class="grid grid-cols-3 gap-2">
-			<button
+			<UIWord
 				v-for="([word, p, score], i) in words"
 				:key="word"
-				:class="isEqual(path, p) ? 'bg-gray-700' : 'bg-gray-800'"
 				@click="isEqual(path, p) ? deleteWord(p) : (focusedButton = i)"
-				class="flex justify-between w-full items-center gap-2 max-h-10 p-3 rounded-md transition-all text-sm cursor-pointer hover:opacity-80"
-			>
-				{{ word }}
-				<div
-					:class="score > 6 ? 'bg-green-600' : 'bg-yellow-600'"
-					class="pt-1 px-2 rounded-md"
-				>
-					{{ score }}
-				</div>
-			</button>
+				:word
+				:score
+				:selected="isEqual(path, p)"
+			/>
 		</div>
 	</div>
 </template>
