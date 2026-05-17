@@ -6,7 +6,7 @@ const path = computed(() => words.value[selected.value]?.path ?? []);
 
 const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 
-const select = () => (i: number) =>
+const select = (i: number) =>
 	selected.value == i ? deleteWord(path.value) : (selected.value = i);
 
 watch(letters.value, () => (selected.value = 0));
@@ -26,10 +26,14 @@ onKeyStroke(['Enter'], () => deleteWord(path.value));
 			:path
 			@delete="deleteWord"
 		/>
-		<WordTable
-			:selected
-			:words
-			@select="select"
-		/>
+		<div class="grid grid-cols-3 px-4 gap-2 mx-auto pb-4">
+			<WordButton
+				v-for="(word, i) in words"
+				:key="word.word"
+				:word
+				:selected="selected == i"
+				@click="select(i)"
+			/>
+		</div>
 	</Box>
 </template>
