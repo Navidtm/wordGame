@@ -19,7 +19,7 @@ const focus = (n: number) => inputs.value?.[n]?.focus();
 onMounted(() => focus(0));
 watch(letters.value, (v) => focus(v.indexOf('')));
 
-onKeyStroke(['Control'], () => letters.value.fill(''));
+onKeyStroke(['Control'], () => emit('delete', range(16)));
 onKeyStroke(['Enter'], () => emit('delete', path));
 </script>
 <template>
