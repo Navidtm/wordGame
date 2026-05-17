@@ -1,7 +1,14 @@
 <script setup lang="ts">
 const path = defineModel<number[]>({ required: true });
 
-const { words } = defineProps<{ words: [string, number[], number][] }>();
+const { letters } = defineProps<{ letters: string[] }>();
+const words = computed(() => {
+	if (letters.every(Boolean)) {
+		const words = findWords(letters);
+		path.value = words[0]?.[1]!;
+		return words;
+	}
+});
 
 const selected = ref(0);
 

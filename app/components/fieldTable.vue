@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { range } from 'es-toolkit';
 
-const path = defineModel<number[]>({ required: true });
-const emit = defineEmits<{ find: [[string, number[], number][]] }>();
+const letters = defineModel<string[]>({ required: true });
 
-const letters = ref<string[]>(Array(16).fill(''));
-
+const { path } = defineProps<{ path: number[] }>();
 const inputs = useTemplateRef('inputs');
 
 const parseInput = (n: number) => {
@@ -20,30 +18,16 @@ const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 onMounted(() => inputs.value?.[0]?.focus());
 
 watch(letters.value, (v) => {
-	const words = findWords(v);
-	emit('find', words);
-
-	if (v.indexOf('') >= 0) {
-		path.value = [];
-		inputs.value?.[v.indexOf('')]?.focus();
-	} else {
-		path.value = words[0]?.[1]!;
-	}
+	if (v.indexOf('') >= 0) inputs.value?.[v.indexOf('')]?.focus();
 });
 
-watch(path, (v, o) => v.length == 0 && deleteWord(o));
-
 onKeyStroke(['Control'], () => letters.value.fill(''));
-onKeyStroke(['Enter'], () => deleteWord(path.value));
+onKeyStroke(['Enter'], () => deleteWord(path));
 </script>
 <template>
 	<div
 		class="grid grid-cols-4 bg-primary/60 rounded-lg p-4 gap-2 w-fit mx-auto"
 	>
-		<Reload
-			v-if="letters.some(Boolean)"
-			@click="letters.fill('')"
-		/>
 		<input
 			v-for="n in range(16)"
 			v-model="letters[n]"
