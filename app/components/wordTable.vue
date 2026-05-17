@@ -3,20 +3,21 @@ const path = defineModel<number[]>({ required: true });
 
 const { words } = defineProps<{ words: [string, number[], number][] }>();
 
-const emit = defineEmits<{ submit: [number[]] }>();
-
 const selected = ref(0);
 
 const select = (i: number, p: number[]) => {
 	if (selected.value == i) {
 		selected.value = 0;
-		emit('submit', p);
 		path.value = [];
 	} else {
 		selected.value = i;
 		path.value = p;
 	}
 };
+
+watch(path, (v) => {
+	if (!v.length) selected.value = 0;
+});
 
 onKeyStroke(['Shift'], () => selected.value++);
 </script>

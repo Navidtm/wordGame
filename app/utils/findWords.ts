@@ -1,6 +1,8 @@
 import { chunk, fill, range } from 'es-toolkit';
 import wordList from '~~/data/fa-IR.json';
 
+export type Words = [string, number[], number][];
+
 class Node {
 	children = new Map<string, Node>();
 	isWord: boolean = false;
@@ -45,7 +47,7 @@ class Tree {
 	}
 }
 
-export const findWords = (letters: string[]): [string, number[], number][] => {
+export const findWords = (letters: string[]): Words => {
 	if (letters.filter(Boolean).length < 4 * 4) return [];
 
 	const board = chunk(letters, 4);
