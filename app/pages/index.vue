@@ -6,9 +6,7 @@ const path = computed(() => words.value[selected.value]?.path ?? []);
 
 const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 
-watch(letters.value, (v) => {
-	if (v.indexOf('') >= 0) selected.value = 0;
-});
+watch(letters.value, () => (selected.value = 0));
 
 onKeyStroke(['Shift'], () => selected.value++);
 </script>
@@ -24,6 +22,7 @@ onKeyStroke(['Shift'], () => selected.value++);
 			<FieldTable
 				v-model="letters"
 				:path
+				@delete="deleteWord"
 			/>
 			<WordTable
 				:selected

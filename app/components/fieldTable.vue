@@ -14,11 +14,10 @@ const parseInput = (n: number) => {
 	if (!/[ا-ی]/.test(letters.value[n]!)) letters.value[n] = '';
 };
 
-onMounted(() => inputs.value?.[0]?.focus());
+const focus = (n: number) => inputs.value?.[n]?.focus();
 
-watch(letters.value, (v) => {
-	if (v.indexOf('') >= 0) inputs.value?.[v.indexOf('')]?.focus();
-});
+onMounted(() => focus(0));
+watch(letters.value, (v) => focus(v.indexOf('')));
 
 onKeyStroke(['Control'], () => letters.value.fill(''));
 onKeyStroke(['Enter'], () => emit('delete', path));
