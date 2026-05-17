@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const path = ref<number[]>([]);
+const selected = ref<number>(0);
 const letters = ref<string[]>(Array(16).fill(''));
+const words = computed(() => findWords(letters.value));
+const path = computed(() => words.value[selected.value]?.[1] ?? []);
 
-watch(path, (v, o) => {
-	if (v.length == 0) o.forEach((i) => (letters.value[i] = ''));
-});
+const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 
 watch(letters.value, (v) => {
-	if (v.indexOf('') >= 0) path.value = [];
+	if (v.indexOf('') >= 0) selected.value = 0;
 });
+
+onKeyStroke(['Shift'], () => selected.value++);
 </script>
 <template>
 	<div class="flex items-center justify-center flex-col h-dvh gap-3">
@@ -24,8 +26,11 @@ watch(letters.value, (v) => {
 				:path
 			/>
 			<WordTable
-				v-model="path"
-				:letters
+				:selected
+				:words
+				@select="
+					(i: number) => (selected == i ? deleteWord(path) : (selected = i))
+				"
 			/>
 		</div>
 	</div>
