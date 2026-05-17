@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { range } from 'es-toolkit';
-
 const letters = defineModel<string[]>({ required: true });
 const { path } = defineProps<{ path: number[] }>();
 const emit = defineEmits<{ delete: [number[]] }>();
@@ -18,16 +16,13 @@ const focus = (n: number) => inputs.value?.[n]?.focus();
 
 onMounted(() => focus(0));
 watch(letters.value, (v) => focus(v.indexOf('')));
-
-onKeyStroke(['Control'], () => emit('delete', range(16)));
-onKeyStroke(['Enter'], () => emit('delete', path));
 </script>
 <template>
 	<div
 		class="grid grid-cols-4 bg-primary/60 rounded-lg p-4 gap-2 w-fit mx-auto"
 	>
 		<input
-			v-for="n in range(16)"
+			v-for="n in table"
 			v-model="letters[n]"
 			ref="inputs"
 			ref_for

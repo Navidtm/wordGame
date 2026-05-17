@@ -1,3 +1,5 @@
+import { range } from 'es-toolkit';
+
 export const pathToWord = (path: number[], letters: string[]) =>
 	path.map((v) => letters[v]).join('');
 
@@ -72,3 +74,5 @@ export const persianMap: Record<string, string> = {
 	m: 'پ',
 	',': 'و',
 };
+
+export const table = range(16);
