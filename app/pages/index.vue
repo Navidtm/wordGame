@@ -17,6 +17,14 @@ const deleteWord = (p: number[]) => {
 	focusInput(Math.min(...p));
 };
 
+const convertToPersian = (n: number) => {
+	const char = letters.value[n]!;
+	if (persianMap[char]) letters.value[n] = persianMap[char];
+
+	if (/[ا-ی]/.test(letters.value[n]!)) focusInput(letters.value.indexOf(''));
+	else letters.value[n] = '';
+};
+
 onKeyStroke(['Control'], () => deleteWord(range(16)));
 onKeyStroke(['Enter'], () => deleteWord(path.value));
 onKeyStroke(['Shift'], () => focusedButton.value++);
@@ -37,7 +45,7 @@ onMounted(() => focusInput(0));
 				maxlength="1"
 				@click="deleteWord([n])"
 				@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
-				@input="nextTick(() => focusInput(letters.indexOf('')))"
+				@input="nextTick(() => convertToPersian(n))"
 			/>
 		</div>
 		<div class="w-full max-w-62">
