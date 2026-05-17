@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const selected = ref<number>(0);
+const selected = ref(0);
 const letters = ref<string[]>(Array(16).fill(''));
 const words = computed(() => findWords(letters.value));
-const path = computed(() => words.value[selected.value]?.[1] ?? []);
+const path = computed(() => words.value[selected.value]?.path ?? []);
 
 const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
 

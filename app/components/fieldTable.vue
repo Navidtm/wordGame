@@ -2,8 +2,9 @@
 import { range } from 'es-toolkit';
 
 const letters = defineModel<string[]>({ required: true });
-
 const { path } = defineProps<{ path: number[] }>();
+const emit = defineEmits<{ delete: [number[]] }>();
+
 const inputs = useTemplateRef('inputs');
 
 const parseInput = (n: number) => {
@@ -13,8 +14,6 @@ const parseInput = (n: number) => {
 	if (!/[ا-ی]/.test(letters.value[n]!)) letters.value[n] = '';
 };
 
-const deleteWord = (p: number[]) => p.forEach((n) => (letters.value[n] = ''));
-
 onMounted(() => inputs.value?.[0]?.focus());
 
 watch(letters.value, (v) => {
@@ -22,7 +21,7 @@ watch(letters.value, (v) => {
 });
 
 onKeyStroke(['Control'], () => letters.value.fill(''));
-onKeyStroke(['Enter'], () => deleteWord(path));
+onKeyStroke(['Enter'], () => emit('delete', path));
 </script>
 <template>
 	<div
@@ -37,8 +36,8 @@ onKeyStroke(['Enter'], () => deleteWord(path));
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
 			:class="path.includes(n) && letters[n] ? 'bg-gray-700' : 'bg-gray-800'"
 			maxlength="1"
-			@click="deleteWord([n])"
-			@keyup.delete="deleteWord(letters[n] ? [n] : [n - 1])"
+			@click="emit('delete', [n])"
+			@keyup.delete="emit('delete', letters[n] ? [n] : [n - 1])"
 			@input="nextTick(() => parseInput(n))"
 		/>
 	</div>

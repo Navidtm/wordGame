@@ -1,7 +1,11 @@
 import { chunk, fill, range } from 'es-toolkit';
 import wordList from '~~/data/fa-IR.json';
 
-export type Words = [string, number[], number][];
+export type Word = {
+	word: string;
+	path: number[];
+	score: number;
+};
 
 class Node {
 	children = new Map<string, Node>();
@@ -47,7 +51,7 @@ class Tree {
 	}
 }
 
-export const findWords = (letters: string[]): Words => {
+export const findWords = (letters: string[]): Word[] => {
 	if (letters.filter(Boolean).length < 4 * 4) return [];
 
 	const board = chunk(letters, 4);
@@ -83,7 +87,9 @@ export const findWords = (letters: string[]): Words => {
 	return found
 		.entries()
 		.toArray()
-		.map<[string, number[], number]>((v) => [...v, wordToScore(v[0])])
-		.sort((a, b) => (b[2] == a[2] ? a[1].length - b[1].length : b[2] - a[2]))
+		.map<Word>((v) => ({ word: v[0], path: v[1], score: wordToScore(v[0]) }))
+		.sort((a, b) =>
+			b.score == a.score ? a.word.length - b.word.length : b.score - a.score,
+		)
 		.slice(0, 12);
 };
