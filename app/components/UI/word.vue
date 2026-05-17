@@ -2,9 +2,10 @@
 defineProps<{
 	word: string;
 	score: number;
-    selected:boolean
+	selected: boolean;
 }>();
 </script>
+
 <template>
 	<button
 		:class="selected ? 'bg-gray-700' : 'bg-gray-800'"
