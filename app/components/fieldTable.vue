@@ -11,14 +11,7 @@ const emit = defineEmits<{ delete: [number[]]; insert: [string, number] }>();
 
 const inputs = useTemplateRef('inputs');
 
-const parseInput = (char: string, n: number) => {
-	let c = ' ';
-	if (/[ا-ی]/.test(char)) c = char;
-	if (persianMap[char]) c = persianMap[char];
-	emit('insert', c, n);
-};
-
-const focus = (n: number) => inputs.value?.[n]?.focus();
+const { focus, parseInput } = useInputEl(inputs);
 
 onMounted(() => focus(0));
 watch(props.chars, (v) => focus(v.indexOf('')));
@@ -39,7 +32,7 @@ watch(props.chars, (v) => focus(v.indexOf('')));
 			:value="chars[n]"
 			@click="emit('delete', [n])"
 			@keyup.delete="emit('delete', chars[n] ? [n] : [n - 1])"
-			@input="({ data }) => parseInput(data!, n)"
+			@input="() => emit('insert', parseInput(n), n)"
 		/>
 	</div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { range } from 'es-toolkit';
 
-const aspect = ref<[number, number]>([4, 3]);
+const aspect = ref<[number, number]>([4, 4]);
 const selected = ref(0);
 
 const { chars, deleteWord, insert } = useChars(aspect, {
@@ -35,7 +35,7 @@ onKeyStroke(['Enter'], () => deleteWord(path.value));
 <template>
 	<Box>
 		<Reload
-			v-if="chars.length > 0"
+			v-if="chars.some(Boolean)"
 			@click="deleteWord(range(aspect[0] * aspect[1]))"
 		/>
 		<FieldTable
