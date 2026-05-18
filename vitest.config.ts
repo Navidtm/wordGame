@@ -15,7 +15,7 @@ export default defineConfig({
 			await defineVitestProject({
 				test: {
 					name: 'nuxt',
-					include: ['app/test/*.{test,spec}.ts'],
+					include: ['server/tests/*.{test,spec}.ts'],
 					environment: 'nuxt',
 					environmentOptions: {
 						nuxt: {

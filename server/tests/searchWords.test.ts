@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { searchWordsInGrid } from '../utils/wordSearch';
 
-describe('find words', () => {
+describe('search words', () => {
 	it('should be works as expected', async () => {
 		const wordList = await searchWordsInGrid([
 			['ش', 'س', 'ص', 'ض'],
