@@ -1,11 +1,5 @@
 import { chunk, fill, range } from 'es-toolkit';
-import wordList from '~~/data/fa-IR.json';
-
-export type Word = {
-	word: string;
-	path: number[];
-	score: number;
-};
+import wordList from '../data/fa-IR.json';
 
 class Node {
 	children = new Map<string, Node>();
