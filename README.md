@@ -1,75 +1,35 @@
-# Nuxt Minimal Starter
+# 🎲 Boggle Game (Persian)
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A high-performance word search engine and game interface for Persian (Farsi) words, inspired by Boggle. Built with Nuxt 4 and UnoCSS.
 
-## Setup
+[![Nuxt](https://img.shields.io/badge/Nuxt-4-00DC82?logo=nuxt)](https://nuxt.com)
+[![UnoCSS](https://img.shields.io/badge/UnoCSS--333?logo=unocss)](https://unocss.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript)](https://www.typescriptlang.org)
 
-Make sure to install dependencies:
+## ✨ Features
+
+- **Persian dictionary** – full word list (+100,000 words)
+- **Any grid size** – rectangular M×N boards
+- **Fast search algorithm** – Trie + DFS with pruning
+- **Path tracking** – returns the exact sequence of cell indices for each found word
+- **Responsive UI** – UnoCSS for styling, ready for mobile and desktop
+- **Word scoring**
+- **Full TypeScript**
+
+## 🚀 Quick Start
 
 ```bash
-# npm
-npm install
+# Clone the repository
+git clone https://github.com/Navidtm/wordGame.git
+cd wordGame
 
-# pnpm
+# Install dependencies
 pnpm install
 
-# yarn
-yarn install
+# Start development server
+pnpm run dev
 
-# bun
-bun install
+# Build for production
+pnpm run build
+pnpm run preview
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
