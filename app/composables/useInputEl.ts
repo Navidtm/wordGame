@@ -3,7 +3,7 @@ import type { ShallowRef } from 'vue';
 export const useInputEl = (
 	inputs: Readonly<ShallowRef<HTMLInputElement[] | null>>,
 ) => {
-	const parseInput = (n: number) => {
+	const parseInput = (n: number): string => {
 		if (!inputs.value?.[n]?.value) return '';
 
 		let char = inputs.value?.[n]?.value;
@@ -14,7 +14,7 @@ export const useInputEl = (
 		return '';
 	};
 
-	const focus = (n: number) => inputs.value?.[n]?.focus();
+	const focus = (n: number): void => inputs.value?.[n]?.focus();
 
 	return { focus, parseInput };
 };
