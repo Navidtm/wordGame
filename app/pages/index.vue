@@ -38,6 +38,7 @@ onKeyStroke(['Enter'], () => deleteWord(path.value));
 			v-if="chars.some(Boolean)"
 			@click="deleteWord(range(aspect[0] * aspect[1]))"
 		/>
+		<div class="h-60"></div>
 		<FieldTable
 			:aspect
 			:chars
@@ -45,7 +46,7 @@ onKeyStroke(['Enter'], () => deleteWord(path.value));
 			@insert="insert"
 			@delete="deleteWord"
 		/>
-		<div class="grid grid-cols-3 px-4 gap-2 mx-auto pb-4">
+		<div class="grid grid-cols-3 px-4 gap-2 mx-auto pb-4 h-60 content-center">
 			<WordButton
 				v-for="(word, i) in data?.words"
 				:key="word.word"
