@@ -1,8 +1,13 @@
-export const useChars = (opsions?: {
-	onDelete: () => void;
-	onFilled: () => void;
-}) => {
-	const chars = ref<string[]>(Array(16).fill(''));
+export const useChars = (
+	aspect: Ref<[number, number]>,
+	opsions?: {
+		onDelete: () => void;
+		onFilled: () => void;
+	},
+) => {
+	const chars = ref<string[]>(
+		Array(aspect.value[0] * aspect.value[1]).fill(''),
+	);
 
 	const deleteWord = (p: number[]) => {
 		p.forEach((n) => (chars.value[n] = ''));

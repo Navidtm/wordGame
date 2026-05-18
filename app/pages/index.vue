@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { range } from 'es-toolkit';
+
+const aspect = ref<[number, number]>([4, 3]);
 const selected = ref(0);
 
-const { chars, deleteWord, insert } = useChars({
+const { chars, deleteWord, insert } = useChars(aspect, {
 	onDelete: () => {
 		selected.value = 0;
 		clear();
@@ -9,8 +12,9 @@ const { chars, deleteWord, insert } = useChars({
 	onFilled: async () => await execute(),
 });
 
-const { data, execute, clear } = await useFetch('/api/process', {
-	onRequest: ({ options }) => (options.body = { chars: chars.value }),
+const { data, execute, clear } = await useFetch('/api/search', {
+	onRequest: ({ options }) =>
+		(options.body = { chars: chars.value, aspect: aspect.value }),
 	immediate: false,
 	method: 'post',
 	watch: false,
@@ -23,16 +27,19 @@ const select = (i: number) =>
 	selected.value == i ? deleteWord(path.value) : (selected.value = i);
 
 onKeyStroke(['Shift'], () => selected.value++);
-onKeyStroke(['Control'], () => deleteWord(table));
+onKeyStroke(['Control'], () =>
+	deleteWord(range(aspect.value[0] * aspect.value[1])),
+);
 onKeyStroke(['Enter'], () => deleteWord(path.value));
 </script>
 <template>
 	<Box>
 		<Reload
-			v-if="chars.some(Boolean)"
-			@click="deleteWord(table)"
+			v-if="chars.length > 0"
+			@click="deleteWord(range(aspect[0] * aspect[1]))"
 		/>
 		<FieldTable
+			:aspect
 			:chars
 			:path
 			@insert="insert"

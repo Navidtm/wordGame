@@ -1,9 +1,13 @@
-import { range } from 'es-toolkit';
-
 export const pathToWord = (path: number[], letters: string[]) =>
 	path.map((v) => letters[v]).join('');
 
-export const wordToScore = (word: string): number =>
+/**
+ * Calculates the score for a word based on its length.
+ * Longer words receive higher scores.
+ * @param word - The word to evaluate.
+ * @returns The computed score.
+ */
+export const computeScore = (word: string): number =>
 	word.split('').reduce((a, c) => a + (scoreMap[c] ?? 0), 0);
 
 const scoreMap: Record<string, number> = {
@@ -74,5 +78,3 @@ export const persianMap: Record<string, string> = {
 	m: 'پ',
 	',': 'و',
 };
-
-export const table = range(16);

@@ -1,12 +1,21 @@
 <script setup lang="ts">
-const props = defineProps<{ path: number[]; chars: string[] }>();
+import { range } from 'es-toolkit';
+
+const props = defineProps<{
+	path: number[];
+	chars: string[];
+	aspect: [number, number];
+}>();
+
 const emit = defineEmits<{ delete: [number[]]; insert: [string, number] }>();
 
 const inputs = useTemplateRef('inputs');
 
 const parseInput = (char: string, n: number) => {
-	if (persianMap[char]) emit('insert', persianMap[char], n);
-	if (!/[ا-ی]/.test(props.chars[n]!)) emit('insert', '', n);
+	let c = ' ';
+	if (/[ا-ی]/.test(char)) c = char;
+	if (persianMap[char]) c = persianMap[char];
+	emit('insert', c, n);
 };
 
 const focus = (n: number) => inputs.value?.[n]?.focus();
@@ -15,9 +24,12 @@ onMounted(() => focus(0));
 watch(props.chars, (v) => focus(v.indexOf('')));
 </script>
 <template>
-	<div class="grid grid-cols-4 rounded-lg p-4 gap-2 w-fit mx-auto">
+	<div
+		class="grid rounded-lg p-4 gap-2 w-fit mx-auto"
+		:style="{ gridTemplateColumns: `repeat(${aspect[0]},1fr)` }"
+	>
 		<input
-			v-for="n in table"
+			v-for="n in range(aspect[0] * aspect[1])"
 			:key="n"
 			ref="inputs"
 			ref_for
