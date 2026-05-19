@@ -8,8 +8,6 @@ const select = () => {
 	return 0;
 };
 
-watch(selected, (v, o) => v == 0 && o != 0);
-
 onKeyStroke(['Shift'], () => selected.value++);
 onKeyStroke(['Enter'], () => select());
 </script>
