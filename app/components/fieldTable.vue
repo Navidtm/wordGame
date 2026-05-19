@@ -10,12 +10,7 @@ const { path = [], aspect } = defineProps<{
 
 const inputs = useTemplateRef('inputs');
 
-const { focus, parseInput } = useInputEl(inputs);
-
-onStartTyping(() => focus(0));
-watch(chars.value, (v) => focus(v!.indexOf('')));
-
-onKeyStroke(['Enter'], () => path.forEach((n) => (chars.value[n] = '')));
+const { parseInput } = useInputEl(inputs, chars);
 </script>
 <template>
 	<div
@@ -33,7 +28,7 @@ onKeyStroke(['Enter'], () => path.forEach((n) => (chars.value[n] = '')));
 			:value="chars[n]"
 			@click="chars[n] = ''"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="() => (chars[n] = parseInput(n))"
+			@input="() => parseInput(n)"
 		/>
 	</div>
 </template>

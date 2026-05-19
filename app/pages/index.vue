@@ -2,13 +2,18 @@
 const aspect = ref<[number, number]>([4, 4]);
 const { chars, data } = useChars(aspect);
 
-const selected = ref<number>(0);
+const selected = ref(0);
 const path = computed(() => data?.value?.words[selected.value]?.path);
 
-watch(chars.value, () => (selected.value = 0));
+const submit = () => {
+	path?.value?.forEach((n) => (chars.value[n] = ''));
+	selected.value = 0;
+};
+onKeyStroke(['Enter'], submit);
 </script>
 <template>
 	<Box>
+		{{ selected }}
 		<Refresh @click="chars = []" />
 		<div class="h-60"></div>
 		<FieldTable
@@ -16,13 +21,10 @@ watch(chars.value, () => (selected.value = 0));
 			:aspect
 			:path
 		/>
-		<div class="h-60 mx-auto">
-			<WordTable
-				v-if="data"
-				v-model="selected"
-				:words="data?.words"
-				@submit="() => path?.forEach((v) => (chars[v] = ''))"
-			/>
-		</div>
+		<WordTable
+			v-model="selected"
+			:words="data?.words"
+			@submit="submit"
+		/>
 	</Box>
 </template>

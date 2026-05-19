@@ -3,19 +3,13 @@ const selected = defineModel<number>({ required: true });
 const { words } = defineProps<{ words?: Word[] }>();
 const emit = defineEmits<{ submit: [] }>();
 
-const select = (n: number) => {
-	if (selected.value !== n) {
-		selected.value = n;
-	} else {
-		emit('submit');
-		selected.value = 0;
-	}
-};
+const select = (n: number) =>
+	selected.value == n ? emit('submit') : (selected.value = n);
 
 onKeyStroke(['Shift'], () => selected.value++);
 </script>
 <template>
-	<div class="grid grid-cols-3 px-4 gap-2 py-4 content-center">
+	<div class="grid grid-cols-3 px-4 gap-2 py-4 content-center h-60 mx-auto">
 		<button
 			v-for="(word, i) in words"
 			:key="word.word"
