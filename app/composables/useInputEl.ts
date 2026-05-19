@@ -18,7 +18,7 @@ export const useInputEl = (
 	const focus = (n: number): void => inputs.value?.[n]?.focus();
 	onStartTyping(() => focus(0));
 
-	watch(chars, (v) => focus(v!.indexOf('')));
+	watch(chars.value, (v) => focus(v!.indexOf('')));
 
 	return { focus, parseInput, chars };
 };
