@@ -1,4 +1,4 @@
-import { searchWordsSchema } from '../schemas/search';
+import { searchWordsSchema } from '../schema/search';
 import { defineCustomHandler } from '../utils/handler';
 
 export default defineCustomHandler(
