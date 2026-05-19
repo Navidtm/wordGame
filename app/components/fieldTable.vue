@@ -28,7 +28,7 @@ const { parseInput } = useInputEl(inputs, chars);
 			:value="chars[n]"
 			@click="chars[n] = ''"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="() => parseInput(n)"
+			@input="({ data }) => parseInput(n, data)"
 		/>
 	</div>
 </template>

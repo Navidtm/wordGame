@@ -4,15 +4,13 @@ export const useInputEl = (
 	inputs: Readonly<ShallowRef<HTMLInputElement[] | null>>,
 	chars: Ref<string[]>,
 ) => {
-	const parseInput = (n: number): void => {
-		if (!inputs.value?.[n]?.value) return;
+	const parseInput = (n: number, data: string | null): void => {
+		if (!data) return;
 
-		let char = inputs.value?.[n]?.value;
-		char = persianMap[char.toLowerCase()] ?? char;
+		data = persianMap[data.toLowerCase()] ?? data;
 
-		if (/[ا-ی]/.test(char)) chars.value[n] = char;
+		if (/[ا-ی]/.test(data)) chars.value[n] = data;
 		else inputs.value![n]!.value = '';
-		return;
 	};
 
 	const focus = (n: number): void => inputs.value?.[n]?.focus();
@@ -20,5 +18,5 @@ export const useInputEl = (
 
 	watch(chars.value, (v) => focus(v!.indexOf('')));
 
-	return { focus, parseInput, chars };
+	return { parseInput };
 };
