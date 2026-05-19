@@ -5,9 +5,7 @@ const { chars, data } = useChars(aspect);
 const selected = ref<number>(0);
 const path = computed(() => data?.value?.words[selected.value]?.path);
 
-watch(chars.value, (v) => {
-	if (v.indexOf('') >= 0) selected.value = 0;
-});
+watch(chars.value, () => (selected.value = 0));
 </script>
 <template>
 	<Box>
