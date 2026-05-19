@@ -5,11 +5,7 @@ const { chars, data } = useChars(aspect);
 const selected = ref(0);
 const path = computed(() => data?.value?.words[selected.value]?.path);
 
-const submit = () => {
-	path.value?.forEach((n) => (chars.value[n] = ''));
-	selected.value = 0;
-};
-onKeyStroke(['Enter'], submit);
+const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
 </script>
 <template>
 	<Box>
