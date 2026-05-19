@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { range } from 'es-toolkit';
+import { range, chunk } from 'es-toolkit';
 
-const aspect = ref<[number, number]>([4, 4]);
+const aspect = ref<[number, number]>([4, 3]);
 const selected = ref(0);
 
 const { chars, deleteWord, insert } = useChars(aspect, {
@@ -14,7 +14,7 @@ const { chars, deleteWord, insert } = useChars(aspect, {
 
 const { data, execute, clear } = await useFetch('/api/search', {
 	onRequest: ({ options }) =>
-		(options.body = { chars: chars.value, aspect: aspect.value }),
+		(options.body = { grid: chunk(chars.value, aspect.value[0]) }),
 	immediate: false,
 	method: 'post',
 	watch: false,
