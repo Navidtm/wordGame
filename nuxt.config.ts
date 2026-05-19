@@ -4,9 +4,15 @@ export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
 	devtools: { enabled: true },
 
-	modules: ['@vueuse/nuxt', '@nuxt/test-utils', '@unocss/nuxt', '@nuxt/fonts'],
+	modules: [
+		'@vueuse/nuxt',
+		'@nuxt/test-utils',
+		'@unocss/nuxt',
+		'@nuxt/fonts',
+		'@nuxt/icon',
+	],
 
-	ssr: false,
+	ssr: true,
 
 	css: ['~/assets/css/main.css'],
 
