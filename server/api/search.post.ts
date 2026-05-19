@@ -7,16 +7,14 @@ export default defineCustomHandler(
 			body: searchWordsSchema,
 		});
 
-		const { grid, minWordLength, maxResults } = body;
+		const { grid, ...options } = body;
 
 		const words: FoundWord[] = await searchWordsInGrid(grid, {
-			minWordLength,
-			maxResults,
-			timeoutMs: 8000,
+			...options,
 			signal,
 		});
 
-		return { words, totalFound: words.length };
+		return { words };
 	},
 	{ timeoutMs: 10000 },
 );
