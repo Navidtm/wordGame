@@ -1,8 +1,12 @@
 import { searchWordsSchema } from '../schema/search';
-import { defineCustomHandler } from '../utils/handler';
+import { validateRequest } from '../utils/validateRequest';
 
 export default defineCustomHandler(
-	async ({ body, signal }) => {
+	async ({ event, signal }) => {
+		const { body } = await validateRequest(event, {
+			body: searchWordsSchema,
+		});
+
 		const { grid, minWordLength, maxResults } = body;
 
 		const words: FoundWord[] = await searchWordsInGrid(grid, {
@@ -14,8 +18,5 @@ export default defineCustomHandler(
 
 		return { words, totalFound: words.length };
 	},
-	{
-		schema: searchWordsSchema,
-		timeoutMs: 10000,
-	},
+	{ timeoutMs: 10000 },
 );

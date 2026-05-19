@@ -1,43 +1,21 @@
-import { H3Event, createError, readBody } from 'h3';
-import type { ZodType } from 'zod';
+import { H3Event, createError } from 'h3';
 
-type HandlerFn<TBody, TResult> = (e: {
+type HandlerFn<TResult> = (e: {
 	event: H3Event;
-	body: TBody;
 	signal: AbortSignal;
 }) => Promise<TResult>;
 
-interface HandlerOptions<TBody> {
-	schema?: ZodType<TBody>;
-	/** milliseconds, default 5000 */
+interface HandlerOptions {
 	timeoutMs?: number;
 }
 
-export function defineCustomHandler<TBody = any, TResult = any>(
-	handler: HandlerFn<TBody, TResult>,
-	options: HandlerOptions<TBody> = {},
+export function defineCustomHandler<TResult = any>(
+	handler: HandlerFn<TResult>,
+	options: HandlerOptions = {},
 ) {
-	const { schema, timeoutMs = 5000 } = options;
+	const { timeoutMs = 5000 } = options;
 
 	return defineEventHandler(async (event) => {
-		const rawBody = await readBody(event);
-
-		let validatedBody: TBody;
-		if (schema) {
-			const result = await schema.safeParseAsync(rawBody);
-			if (!result.success) {
-				throw createError({
-					statusCode: 400,
-					statusMessage: 'Bad Request',
-					message: result.error.message,
-				});
-			}
-			validatedBody = result.data;
-		} else {
-			validatedBody = rawBody as TBody;
-		}
-
-		// 3. آماده‌سازی AbortController برای لغو درخواست
 		const { signal, abort } = new AbortController();
 		event.node.req.on('close', () => {
 			if (!event.node.req.destroyed) {
@@ -45,7 +23,6 @@ export function defineCustomHandler<TBody = any, TResult = any>(
 			}
 		});
 
-		// 4. تایمر
 		const timeoutId = setTimeout(() => {
 			abort();
 		}, timeoutMs);
@@ -55,7 +32,6 @@ export function defineCustomHandler<TBody = any, TResult = any>(
 		try {
 			const result = await handler({
 				event,
-				body:validatedBody,
 				signal,
 			});
 
