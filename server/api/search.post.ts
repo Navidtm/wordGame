@@ -1,5 +1,4 @@
 import { searchWordsSchema } from '../schema/search';
-import { validateRequest } from '../utils/validateRequest';
 
 export default defineCustomHandler(
 	async ({ event, signal }) => {
