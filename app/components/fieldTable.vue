@@ -15,6 +15,8 @@ const { focus, parseInput } = useInputEl(inputs);
 
 onStartTyping(() => focus(0));
 watch(props.chars, (v) => focus(v.indexOf('')));
+
+onKeyStroke(['Enter'], () => emit('delete', props.path));
 </script>
 <template>
 	<div
@@ -28,7 +30,7 @@ watch(props.chars, (v) => focus(v.indexOf('')));
 			ref_for
 			maxlength="1"
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
-			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
+			:class="path?.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
 			:value="chars[n]"
 			@click="emit('delete', [n])"
 			@keyup.delete="emit('delete', chars[n] ? [n] : [n - 1])"
