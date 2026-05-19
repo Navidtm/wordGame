@@ -7,9 +7,9 @@ export const useInputEl = (
 		if (!inputs.value?.[n]?.value) return '';
 
 		let char = inputs.value?.[n]?.value;
+		char = persianMap[char.toLowerCase()] ?? char;
 
 		if (/[ا-ی]/.test(char)) return char;
-		else if (/[a-zA-Z]/.test(char)) return persianMap[char.toLowerCase()]!;
 		else inputs.value![n]!.value = '';
 		return '';
 	};
