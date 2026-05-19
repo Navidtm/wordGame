@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const aspect = ref<[number, number]>([4, 4]);
 const path = ref<number[]>([]);
-const { chars, words } = useChars(aspect);
+const { chars, data } = useChars(aspect);
 </script>
 <template>
 	<Box>
@@ -10,12 +10,12 @@ const { chars, words } = useChars(aspect);
 		<FieldTable
 			v-model="chars"
 			:aspect
-			:path="!!words.length ? path : []"
+			:path="data?.words ? path : []"
 		/>
 		<div class="h-60 mx-auto">
 			<WordTable
-				v-if="!!words.length"
-				:words
+				v-if="data?.words"
+				:words="data.words"
 				@select="(p: number[]) => (path = p)"
 				@submit="() => path.forEach((n) => (chars[n] = ''))"
 			/>

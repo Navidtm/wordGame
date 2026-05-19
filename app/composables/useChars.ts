@@ -1,4 +1,4 @@
-import { chunk } from 'es-toolkit';
+import { chunk, fill } from 'es-toolkit';
 
 export const useChars = (aspect: Ref<[number, number]>) => {
 	const { data, execute, clear } = useFetch('/api/search', {
@@ -11,16 +11,9 @@ export const useChars = (aspect: Ref<[number, number]>) => {
 		deep: true,
 	});
 
-	const chars = ref<string[]>(
-		Array(aspect.value[0] * aspect.value[1]).fill(''),
-	);
+	const chars = ref(fill(Array(aspect.value[0] * aspect.value[1]), ''));
 
-	watch(chars.value, (v) => {
-		if (v.indexOf('') == -1) execute();
-		else clear();
-	});
+	watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 
-	const words = computed(() => data.value?.words ?? []);
-
-	return { chars, words };
+	return { chars, data };
 };
