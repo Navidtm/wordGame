@@ -3,8 +3,8 @@ import { range } from 'es-toolkit';
 
 const chars = defineModel<string[]>({ required: true });
 
-const props = defineProps<{
-	path: number[];
+const { path = [], aspect } = defineProps<{
+	path?: number[];
 	aspect: [number, number];
 }>();
 
@@ -15,7 +15,7 @@ const { focus, parseInput } = useInputEl(inputs);
 onStartTyping(() => focus(0));
 watch(chars.value, (v) => focus(v!.indexOf('')));
 
-onKeyStroke(['Enter'], () => props.path.forEach((n) => (chars.value[n] = '')));
+onKeyStroke(['Enter'], () => path.forEach((n) => (chars.value[n] = '')));
 </script>
 <template>
 	<div

@@ -1,19 +1,16 @@
 <script setup lang="ts">
+const selected = defineModel<number>({ required: true });
 const { words } = defineProps<{ words?: Word[] }>();
-const emit = defineEmits<{ select: [number[]]; submit: [number[]] }>();
+const emit = defineEmits<{ submit: [] }>();
 
-const selected = ref(0);
 const select = (n: number) => {
 	if (selected.value !== n) {
 		selected.value = n;
-		emit('select', words?.[n]?.path!);
 	} else {
+		emit('submit');
 		selected.value = 0;
-		emit('submit', words?.[n]?.path!);
 	}
 };
-
-onMounted(() => emit('select', words?.[0]?.path!));
 
 onKeyStroke(['Shift'], () => selected.value++);
 </script>
@@ -23,7 +20,7 @@ onKeyStroke(['Shift'], () => selected.value++);
 			v-for="(word, i) in words"
 			:key="word.word"
 			class="flex justify-between w-full items-center gap-2 max-h-10 p-3 rounded-md transition-all text-sm cursor-pointer hover:opacity-80"
-			:class="selected ? 'bg-gray-700' : 'bg-gray-800'"
+			:class="selected == i ? 'bg-gray-700' : 'bg-gray-800'"
 			@click="() => select(i)"
 		>
 			{{ word.word }}

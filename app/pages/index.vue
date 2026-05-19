@@ -1,7 +1,13 @@
 <script setup lang="ts">
 const aspect = ref<[number, number]>([4, 4]);
-const path = ref<number[]>([]);
 const { chars, data } = useChars(aspect);
+
+const selected = ref<number>(0);
+const path = computed(() => data?.value?.words[selected.value]?.path);
+
+watch(chars.value, (v) => {
+	if (v.indexOf('') >= 0) selected.value = 0;
+});
 </script>
 <template>
 	<Box>
@@ -10,14 +16,14 @@ const { chars, data } = useChars(aspect);
 		<FieldTable
 			v-model="chars"
 			:aspect
-			:path="data?.words ? path : []"
+			:path
 		/>
 		<div class="h-60 mx-auto">
 			<WordTable
-				v-if="data?.words"
-				:words="data.words"
-				@select="(p: number[]) => (path = p)"
-				@submit="() => path.forEach((n) => (chars[n] = ''))"
+				v-if="data"
+				v-model="selected"
+				:words="data?.words"
+				@submit="() => path?.forEach((v) => (chars[v] = ''))"
 			/>
 		</div>
 	</Box>
