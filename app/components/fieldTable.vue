@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { range } from 'es-toolkit';
 
+const chars = defineModel<string[]>({ required: true });
+
 const props = defineProps<{
 	path: number[];
-	chars: string[];
 	aspect: [number, number];
 }>();
-
-const emit = defineEmits<{ delete: [number[]]; insert: [string, number] }>();
 
 const inputs = useTemplateRef('inputs');
 
 const { focus, parseInput } = useInputEl(inputs);
 
 onStartTyping(() => focus(0));
-watch(props.chars, (v) => focus(v.indexOf('')));
+watch(chars.value, (v) => focus(v!.indexOf('')));
 
-onKeyStroke(['Enter'], () => emit('delete', props.path));
+onKeyStroke(['Enter'], () => props.path.forEach((n) => (chars.value[n] = '')));
 </script>
 <template>
 	<div
@@ -32,9 +31,9 @@ onKeyStroke(['Enter'], () => emit('delete', props.path));
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
 			:class="path?.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
 			:value="chars[n]"
-			@click="emit('delete', [n])"
-			@keyup.delete="emit('delete', chars[n] ? [n] : [n - 1])"
-			@input="() => emit('insert', parseInput(n), n)"
+			@click="chars[n] = ''"
+			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
+			@input="() => (chars[n] = parseInput(n))"
 		/>
 	</div>
 </template>

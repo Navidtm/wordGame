@@ -1,21 +1,24 @@
 <script setup lang="ts">
 const aspect = ref<[number, number]>([4, 4]);
-const { chars, deleteChars, insert, words, selected } = useChars(aspect);
+const path = ref<number[]>([]);
+const { chars, words } = useChars(aspect);
 </script>
 <template>
 	<Box>
-		<Refresh @click="deleteChars()" />
+		<Refresh @click="chars = []" />
 		<div class="h-60"></div>
 		<FieldTable
+			v-model="chars"
 			:aspect
-			:chars
-			:path="words?.[selected]?.path!"
-			@insert="insert"
-			@delete="deleteChars"
+			:path="!!words.length ? path : []"
 		/>
-		<WordTable
-			v-model="selected"
-			:words
-		/>
+		<div class="h-60 mx-auto">
+			<WordTable
+				v-if="!!words.length"
+				:words
+				@select="(p: number[]) => (path = p)"
+				@submit="() => path.forEach((n) => (chars[n] = ''))"
+			/>
+		</div>
 	</Box>
 </template>
