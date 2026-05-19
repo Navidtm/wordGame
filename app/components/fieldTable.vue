@@ -13,7 +13,7 @@ const inputs = useTemplateRef('inputs');
 
 const { focus, parseInput } = useInputEl(inputs);
 
-onMounted(() => focus(0));
+onStartTyping(() => focus(0));
 watch(props.chars, (v) => focus(v.indexOf('')));
 </script>
 <template>
