@@ -9,7 +9,7 @@ export default defineCustomHandler(
 
 		const { grid, ...options } = body;
 
-		const words: FoundWord[] = await searchWordsInGrid(grid, {
+		const words = await searchWordsInGrid(grid, {
 			...options,
 			signal,
 		});
