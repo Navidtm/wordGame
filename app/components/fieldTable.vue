@@ -10,7 +10,15 @@ const { path = [], aspect } = defineProps<{
 
 const inputs = useTemplateRef('inputs');
 
-const { parseInput } = useInputEl(inputs, chars);
+const parseInput = (n: number, char: string) =>
+	(chars.value[n] = /[ا-ی]/.test(char)
+		? char
+		: persianMap[char.toLowerCase()] || '');
+
+const focus = (n: number): void => inputs.value?.[n]?.focus();
+
+onStartTyping(() => focus(0));
+watch(chars.value, (v) => focus(v!.indexOf('')));
 </script>
 <template>
 	<div
@@ -22,13 +30,13 @@ const { parseInput } = useInputEl(inputs, chars);
 			:key="n"
 			ref="inputs"
 			ref_for
+			:value="chars[n]"
 			maxlength="1"
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
-			:class="path?.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
-			:value="chars[n]"
+			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
 			@click="chars[n] = ''"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="({ data }) => parseInput(n, data)"
+			@input="({ data }) => parseInput(n, data!)"
 		/>
 	</div>
 </template>

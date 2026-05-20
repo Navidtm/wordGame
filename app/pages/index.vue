@@ -5,6 +5,11 @@ const selected = ref(0);
 const { chars, data } = useChars(aspect);
 
 const path = computed(() => data?.value?.words[selected.value]?.path);
+
+const submit = () => {
+	path?.value?.forEach((n) => (chars.value[n] = ''));
+	selected.value = 0;
+};
 </script>
 <template>
 	<Box>
@@ -18,7 +23,7 @@ const path = computed(() => data?.value?.words[selected.value]?.path);
 		<WordTable
 			v-model="selected"
 			:words="data?.words"
-			@submit="() => path?.forEach((n) => (chars[n] = ''))"
+			@submit="submit"
 		/>
 	</Box>
 </template>

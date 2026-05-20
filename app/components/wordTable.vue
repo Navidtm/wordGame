@@ -12,7 +12,7 @@ onKeyStroke(['Shift'], () => selected.value++);
 onKeyStroke(['Enter'], () => select());
 </script>
 <template>
-	<div class="grid grid-cols-3 px-4 gap-2 py-4 content-center h-60 mx-auto">
+	<div class="grid grid-cols-3 px-4 gap-2 py-4 content-start h-60 mx-auto">
 		<button
 			v-for="({ word, score }, i) in words"
 			:key="word"
