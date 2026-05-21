@@ -5,19 +5,20 @@ const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(fill(Array(aspect.value[0] * aspect.value[1]), ''));
 
+const body = computed(() => ({
+	grid: chunk(chars.value, aspect.value[0]),
+	maxResults: 21,
+}));
+
 const { data, execute, clear } = useFetch('/api/search', {
-	onRequest: ({ options }) => {
-		options.body = {
-			grid: chunk(chars.value, aspect.value[0]),
-			maxResults: 21,
-		};
-	},
+	body,
 	immediate: false,
 	method: 'post',
 	watch: false,
 });
 
-const words = computed(() => data.value?.words);
+const words = computed(() => data.value?.words.slice(0, maxResults.value));
+const path = computed(() => words.value?.[selected.value]?.path);
 
 const selected = ref(0);
 
@@ -40,11 +41,11 @@ watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 		<FieldTable
 			v-model="chars"
 			:aspect
-			:path="words?.[selected]?.path"
+			:path
 		/>
 		<WordTable
 			v-model="selected"
-			:words="words?.slice(0, maxResults)"
+			:words
 			@submit="submit"
 		/>
 	</Box>
