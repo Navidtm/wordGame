@@ -14,6 +14,7 @@ export const useChars = (aspect: Ref<[number, number]>) => {
 	const chars = ref(fill(Array(aspect.value[0] * aspect.value[1]), ''));
 
 	watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
+	const words = computed(() => data.value?.words);
 
-	return { chars, data };
+	return { chars, words };
 };

@@ -2,27 +2,27 @@
 const aspect = ref<[number, number]>([4, 4]);
 
 const selected = ref(0);
-const { chars, data } = useChars(aspect);
+const { chars, words } = useChars(aspect);
 
-const path = computed(() => data?.value?.words[selected.value]?.path);
-
-const submit = () => {
-	path?.value?.forEach((n) => (chars.value[n] = ''));
+const submit = (path?: number[]) => {
+	if (path) path.forEach((n) => (chars.value[n] = ''));
+	else chars.value.fill('');
 	selected.value = 0;
 };
 </script>
 <template>
 	<Box>
-		<Refresh @click="chars = []" />
-		<div class="h-60"></div>
+		<template #toolbar>
+			<Refresh @click="submit()" />
+		</template>
 		<FieldTable
 			v-model="chars"
 			:aspect
-			:path
+			:path="words?.[selected]?.path"
 		/>
 		<WordTable
 			v-model="selected"
-			:words="data?.words"
+			:words
 			@submit="submit"
 		/>
 	</Box>
