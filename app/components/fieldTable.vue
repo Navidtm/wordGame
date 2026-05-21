@@ -36,7 +36,7 @@ watch(chars.value, (v) => focus(v!.indexOf('')));
 			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
 			@click="chars[n] = ''"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="({ data }) => parseInput(n, data!)"
+			@input="({ data }) => parseInput(n, data ?? '')"
 		/>
 	</div>
 </template>
