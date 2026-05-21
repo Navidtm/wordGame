@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { chunk, fill } from 'es-toolkit';
 
+const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(fill(Array(aspect.value[0] * aspect.value[1]), ''));
 
 const { data, execute, clear } = useFetch('/api/search', {
 	onRequest: ({ options }) => {
-		options.body = { grid: chunk(chars.value, aspect.value[0]) };
+		options.body = {
+			grid: chunk(chars.value, aspect.value[0]),
+			maxResults: 21,
+		};
 	},
 	immediate: false,
 	method: 'post',
@@ -27,6 +31,10 @@ watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 <template>
 	<Box>
 		<template #toolbar>
+			<Settings
+				v-model:aspect="aspect"
+				v-model:max-results="maxResults"
+			/>
 			<Refresh @click="submit()" />
 		</template>
 		<FieldTable
@@ -36,7 +44,7 @@ watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 		/>
 		<WordTable
 			v-model="selected"
-			:words
+			:words="words?.slice(0, maxResults)"
 			@submit="submit"
 		/>
 	</Box>

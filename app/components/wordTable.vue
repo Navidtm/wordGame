@@ -12,7 +12,9 @@ onKeyStroke(['Shift'], () => selected.value++);
 onKeyStroke(['Enter'], () => select(words?.[selected.value]?.path!));
 </script>
 <template>
-	<div class="grid grid-cols-3 px-4 gap-2 py-4 content-start h-60 mx-auto">
+	<div
+		class="grid grid-cols-3 px-4 gap-2 py-4 content-start h-60 mx-auto overflow-scroll"
+	>
 		<button
 			v-for="({ word, path, score }, i) in words"
 			:key="word"
