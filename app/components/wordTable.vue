@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const selected = defineModel<number>({ required: true });
-const { words } = defineProps<{ words?: Word[] }>();
+const { words } = defineProps<{ words?: FoundWord[] }>();
 const emit = defineEmits<{ submit: [] }>();
 
 onKeyStroke(['Alt'], () => selected.value++);
