@@ -25,7 +25,11 @@ const selected = ref(0);
 
 const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
 
-watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
+watchDebounced(
+	chars.value,
+	(v) => (v.indexOf('') == -1 ? execute() : clear()),
+	{ debounce: 10 },
+);
 </script>
 <template>
 	<Box>
