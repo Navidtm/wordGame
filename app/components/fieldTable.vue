@@ -11,7 +11,7 @@ const { path = [], aspect } = defineProps<{
 const inputs = useTemplateRef('inputs');
 
 const parseInput = (char: string) =>
-	/[ا-ی]/.test(char) ? char : persianMap[char.toLowerCase()] || '';
+	/[ا-ی]/.test(char) ? char : persianMap.get(char.toLowerCase()) || '';
 
 const focus = (n: number): void => inputs.value?.[n]?.focus();
 
