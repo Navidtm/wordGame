@@ -3,7 +3,7 @@ const selected = defineModel<number>({ required: true });
 const { words } = defineProps<{ words?: Word[] }>();
 const emit = defineEmits<{ submit: [] }>();
 
-onKeyStroke(['Shift'], () => selected.value++);
+onKeyStroke(['Alt'], () => selected.value++);
 onKeyStroke(['Enter'], () => emit('submit'));
 </script>
 <template>

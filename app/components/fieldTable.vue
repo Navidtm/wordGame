@@ -23,7 +23,6 @@ watch(chars.value, (v) => focus(v.indexOf('')));
 		class="grid rounded-lg p-4 gap-2 w-fit mx-auto"
 		:style="{ gridTemplateColumns: `repeat(${aspect[0]},1fr)` }"
 	>
-		{{ chars }}
 		<input
 			v-for="n in range(aspect[0] * aspect[1])"
 			:key="n"
