@@ -10,33 +10,30 @@ const { path = [], aspect } = defineProps<{
 
 const inputs = useTemplateRef('inputs');
 
-const parseInput = (n: number, char: string) =>
-	(chars.value[n] = /[ا-ی]/.test(char)
-		? char
-		: persianMap[char.toLowerCase()] || '');
+const parseInput = (char: string) =>
+	/[ا-ی]/.test(char) ? char : persianMap[char.toLowerCase()] || '';
 
 const focus = (n: number): void => inputs.value?.[n]?.focus();
 
 onStartTyping(() => focus(0));
-watch(chars.value, (v) => focus(v!.indexOf('')));
+watch(chars.value, (v) => focus(v.indexOf('')));
 </script>
 <template>
 	<div
 		class="grid rounded-lg p-4 gap-2 w-fit mx-auto"
 		:style="{ gridTemplateColumns: `repeat(${aspect[0]},1fr)` }"
 	>
+		{{ chars }}
 		<input
 			v-for="n in range(aspect[0] * aspect[1])"
 			:key="n"
 			ref="inputs"
 			ref_for
-			:value="chars[n]"
-			maxlength="1"
-			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80"
+			v-model="chars[n]"
+			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80 outline-none ring-3 ring-transparent focus:ring-sky-800"
 			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
-			@click="chars[n] = ''"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="({ data }) => parseInput(n, data ?? '')"
+			@input="({ data }) => (chars[n] = parseInput(data ?? ''))"
 		/>
 	</div>
 </template>

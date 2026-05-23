@@ -15,6 +15,7 @@ const { data, execute, clear } = useFetch('/api/search', {
 	immediate: false,
 	method: 'post',
 	watch: false,
+	onResponse: () => (selected.value = 0),
 });
 
 const words = computed(() => data.value?.words.slice(0, maxResults.value));
@@ -22,11 +23,8 @@ const path = computed(() => words.value?.[selected.value]?.path);
 
 const selected = ref(0);
 
-const submit = (path?: number[]) => {
-	if (path) path.forEach((n) => (chars.value[n] = ''));
-	else chars.value.fill('');
-	selected.value = 0;
-};
+const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
+
 watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 </script>
 <template>
@@ -36,7 +34,7 @@ watch(chars.value, (v) => (v.indexOf('') == -1 ? execute() : clear()));
 				v-model:aspect="aspect"
 				v-model:max-results="maxResults"
 			/>
-			<Refresh @click="submit()" />
+			<Refresh @click="chars.fill('')" />
 		</template>
 		<FieldTable
 			v-model="chars"
