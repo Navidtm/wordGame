@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
 	devtools: { enabled: true },
@@ -11,7 +12,7 @@ export default defineNuxtConfig({
 		'@nuxt/icon',
 	],
 
-	ssr: true,
+	ssr: false,
 
 	css: ['~/assets/css/main.css'],
 
@@ -26,8 +27,14 @@ export default defineNuxtConfig({
 	},
 
 	vite: {
+		clearScreen: false,
 		optimizeDeps: {
 			include: ['es-toolkit'],
+		},
+		envPrefix: ['VITE_', 'TAURI_'],
+		server: {
+			// Tauri requires a consistent port
+			strictPort: true,
 		},
 	},
 
@@ -44,4 +51,5 @@ export default defineNuxtConfig({
 			},
 		],
 	},
+	ignore: ['**/src-tauri/**'],
 });
