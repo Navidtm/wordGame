@@ -7,7 +7,8 @@
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
-		"postinstall": "nuxt prepare"
+		"postinstall": "nuxt prepare",
+		"tauri": "tauri"
 	},
 	"dependencies": {
 		"@iconify-json/lucide": "^1.2.109",
@@ -24,6 +25,7 @@
 	"devDependencies": {
 		"@nuxt/test-utils": "^4.0.3",
 		"@playwright/test": "^1.60.0",
+		"@tauri-apps/cli": "^2.11.2",
 		"@unocss/nuxt": "^66.7.0",
 		"@unocss/preset-wind4": "^66.7.0",
 		"@vitest/coverage-v8": "^4.1.7",
