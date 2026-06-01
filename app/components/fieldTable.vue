@@ -10,8 +10,8 @@ const { path = [], aspect } = defineProps<{
 
 const inputs = useTemplateRef('inputs');
 
-const parseInput = (char: string) =>
-	/[ا-ی]/.test(char) ? char : persianMap.get(char.toLowerCase()) || '';
+// const parseInput = (char: string) =>
+// /[ا-ی]/.test(char) ? char : persianMap.get(char.toLowerCase()) || '';
 
 const focus = (n: number): void => inputs.value?.[n]?.focus();
 
@@ -32,7 +32,7 @@ watch(chars.value, (v) => focus(v.indexOf('')));
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80 outline-none ring-3 ring-transparent focus:ring-sky-800"
 			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
 			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
-			@input="({ data }) => (chars[n] = parseInput(data ?? ''))"
 		/>
+		<!-- @input="({ data }) => (chars[n] = parseInput(data ?? ''))" -->
 	</div>
 </template>

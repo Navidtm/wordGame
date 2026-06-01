@@ -5,13 +5,7 @@ export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
 	devtools: { enabled: true },
 
-	modules: [
-		'@vueuse/nuxt',
-		'@nuxt/test-utils',
-		'@unocss/nuxt',
-		'@nuxt/fonts',
-		'@nuxt/icon',
-	],
+	modules: ['@vueuse/nuxt', '@nuxt/test-utils', '@unocss/nuxt', '@nuxt/icon'],
 
 	ssr: false,
 
@@ -41,18 +35,5 @@ export default defineNuxtConfig({
 		},
 	},
 
-	fonts: {
-		provider: 'local',
-		assets: {
-			strategy: 'public',
-		},
-		families: [
-			{
-				provider: 'local',
-				name: 'iransans',
-				weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-			},
-		],
-	},
 	ignore: ['**/src-tauri/**'],
 });
