@@ -10,26 +10,19 @@ const body = computed(() => ({
 	maxResults: 21,
 }));
 
-const { data, execute, clear } = useFetch('/api/search', {
-	body,
-	immediate: false,
-	method: 'post',
-	watch: false,
-	onResponse: () => (selected.value = 0),
-});
+const words = asyncComputed(() =>
+	chars.value.filter(Boolean).length == 16
+		? searchWordsInGrid(body.value.grid, { ...body.value }).then((v) =>
+				v.slice(0, maxResults.value),
+			)
+		: [],
+);
 
-const words = computed(() => data.value?.words.slice(0, maxResults.value));
 const path = computed(() => words.value?.[selected.value]?.path);
 
 const selected = ref(0);
 
 const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
-
-watchDebounced(
-	chars.value,
-	(v) => (v.indexOf('') == -1 ? execute() : clear()),
-	{ debounce: 10 },
-);
 </script>
 <template>
 	<Box>

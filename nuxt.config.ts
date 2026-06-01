@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
@@ -15,8 +16,10 @@ export default defineNuxtConfig({
 	ssr: false,
 
 	css: ['~/assets/css/main.css'],
+	telemetry: false,
 
 	devServer: {
+		host: '0',
 		port: 3001,
 	},
 
