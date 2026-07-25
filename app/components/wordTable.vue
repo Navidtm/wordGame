@@ -7,9 +7,17 @@ const { words, isReady } = defineProps<{
 	isReady: boolean;
 }>();
 const emit = defineEmits<{ submit: [] }>();
+const wordButtons = useTemplateRef('wordButtons');
+
+const focusWord = async (index: number) => {
+	await nextTick();
+	wordButtons.value?.[index]?.focus();
+};
 
 const selectNext = () => {
-	if (words?.length) selected.value = (selected.value + 1) % words.length;
+	if (!words?.length) return;
+	selected.value = (selected.value + 1) % words.length;
+	focusWord(selected.value);
 };
 
 onKeyStroke(['Alt'], (event) => {
@@ -17,7 +25,14 @@ onKeyStroke(['Alt'], (event) => {
 	selectNext();
 });
 
-onKeyStroke(['Enter'], () => emit('submit'));
+watch(
+	[() => isReady, () => words?.length ?? 0],
+	([ready, count], [wasReady, previousCount]) => {
+		if (!ready || !count || (wasReady && previousCount)) return;
+		selected.value = 0;
+		focusWord(0);
+	},
+);
 </script>
 <template>
 	<div class="px-5 py-4 sm:px-6">
@@ -53,6 +68,8 @@ onKeyStroke(['Enter'], () => emit('submit'));
 			<button
 				v-for="({ word, score }, i) in words"
 				:key="word"
+				ref="wordButtons"
+				ref_for
 				class="premium-result flex w-full min-h-12 items-center justify-between gap-2 rounded-xl bg-white/[.035] p-3 text-sm transition duration-200 active:scale-[.98] focus:outline-none focus:ring-2 focus:ring-sky-400/60"
 				:class="
 					selected == i
@@ -66,6 +83,7 @@ onKeyStroke(['Enter'], () => emit('submit'));
 						: `انتخاب واژه ${word}`
 				"
 				@click="selected == i ? emit('submit') : (selected = i)"
+				@focus="selected = i"
 			>
 				{{ word }}
 				<div

@@ -20,44 +20,129 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 	setDimension(index, aspect.value[index] + amount);
 </script>
 <template>
-	<div ref="settings" class="relative">
+	<div
+		ref="settings"
+		class="relative"
+	>
 		<button
 			@click="toggle()"
-			:class="isOpen ? 'bg-sky-400/18 text-sky-100 shadow-[0_0_20px_rgba(56,189,248,.15)]' : 'bg-white/[.055] text-white/60'"
+			:class="
+				isOpen
+					? 'bg-sky-400/18 text-sky-100 shadow-[0_0_20px_rgba(56,189,248,.15)]'
+					: 'bg-white/[.055] text-white/60'
+			"
 			class="grid size-11 place-items-center rounded-xl transition duration-200 hover:bg-sky-400/15 hover:text-sky-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
 			type="button"
 			aria-label="تنظیمات بازی"
 			:aria-expanded="isOpen"
 			aria-controls="game-settings"
 		>
-			<Icon name="lucide:settings-2" size="17" />
+			<Icon
+				name="lucide:sliders-horizontal"
+				size="20"
+				class="text-sky-300"
+			/>
 		</button>
 		<Transition name="settings-popover">
-			<div v-if="isOpen" id="game-settings" class="absolute left-0 z-10 mt-3 w-72 overflow-hidden rounded-2xl border border-white/[.08] bg-[#162126]/98 shadow-[0_22px_55px_rgba(0,0,0,.48)] backdrop-blur-xl" role="dialog" aria-label="تنظیمات بازی">
-				<div class="bg-gradient-to-l from-sky-400/12 to-transparent px-4 py-3.5">
-					<div class="flex items-center gap-2 text-sm text-white"><Icon name="lucide:sliders-horizontal" size="16" class="text-sky-300" /><span>تنظیمات بازی</span></div>
-					<p class="mt-1 pr-6 text-[11px] text-white/40">نمای بازی را مطابق سلیقه‌تان تنظیم کنید</p>
+			<div
+				v-if="isOpen"
+				id="game-settings"
+				class="absolute left-0 z-10 mt-3 w-72 overflow-hidden rounded-2xl border border-white/[.08] bg-[#162126]/98 shadow-[0_22px_55px_rgba(0,0,0,.48)] backdrop-blur-xl"
+				role="dialog"
+				aria-label="تنظیمات بازی"
+			>
+				<div
+					class="bg-gradient-to-l from-sky-400/12 to-transparent px-4 py-3.5"
+				>
+					<div class="flex items-center gap-2 text-sm text-white">
+						<Icon
+							name="lucide:sliders-horizontal"
+							size="16"
+							class="text-sky-300"
+						/>
+						<span>تنظیمات بازی</span>
+					</div>
+					<p class="mt-1 pr-6 text-[11px] text-white/40">
+						نمای بازی را مطابق سلیقه‌تان تنظیم کنید
+					</p>
 				</div>
 				<div class="space-y-5 p-4 pt-3">
 					<div>
-						<div class="mb-2 flex items-center justify-between text-xs"><span class="text-white/50">تعداد واژه‌ها</span><span class="rounded-lg bg-sky-400/10 px-2 py-1 text-sky-100">{{ maxResults }}</span></div>
-						<div class="flex overflow-hidden rounded-xl bg-black/20 p-1" dir="ltr">
-							<button v-for="count in [6, 12, 18, 21]" :key="count" class="flex-1 rounded-lg py-1.5 text-xs transition" :class="maxResults === count ? 'bg-sky-400/20 text-sky-100 shadow-sm' : 'text-white/40 hover:text-white/75'" type="button" @click="maxResults = count">{{ count }}</button>
+						<div class="mb-2 flex items-center justify-between text-xs">
+							<span class="text-white/50">تعداد واژه‌ها</span>
+							<span class="rounded-lg bg-sky-400/10 px-2 py-1 text-sky-100">
+								{{ maxResults }}
+							</span>
+						</div>
+						<div
+							class="flex overflow-hidden rounded-xl bg-black/20 p-1"
+							dir="ltr"
+						>
+							<button
+								v-for="count in [6, 12, 18, 21]"
+								:key="count"
+								class="flex-1 rounded-lg py-1.5 text-xs transition"
+								:class="
+									maxResults === count
+										? 'bg-sky-400/20 text-sky-100 shadow-sm'
+										: 'text-white/40 hover:text-white/75'
+								"
+								type="button"
+								@click="maxResults = count"
+							>
+								{{ count }}
+							</button>
 						</div>
 					</div>
 					<div>
 						<div class="mb-2 text-xs text-white/50">اندازه جدول</div>
-						<div class="grid grid-cols-2 gap-2" dir="ltr">
-							<div v-for="(dimension, index) in aspect" :key="index" class="flex items-center justify-between rounded-xl bg-black/20 p-1">
-								<button class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50" type="button" :aria-label="`کاهش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`" :disabled="dimension <= 2" @click="changeDimension(index as 0 | 1, -1)"><Icon name="lucide:minus" size="14" /></button>
-								<span class="text-sm text-white/80" :aria-label="`${index === 0 ? 'عرض' : 'ارتفاع'}: ${dimension}`">{{ dimension }}</span>
-								<button class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50" type="button" :aria-label="`افزایش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`" :disabled="dimension >= 5" @click="changeDimension(index as 0 | 1, 1)"><Icon name="lucide:plus" size="14" /></button>
+						<div
+							class="grid grid-cols-2 gap-2"
+							dir="ltr"
+						>
+							<div
+								v-for="(dimension, index) in aspect"
+								:key="index"
+								class="flex items-center justify-between rounded-xl bg-black/20 p-1"
+							>
+								<button
+									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+									type="button"
+									:aria-label="`کاهش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
+									:disabled="dimension <= 2"
+									@click="changeDimension(index as 0 | 1, -1)"
+								>
+									<Icon
+										name="lucide:minus"
+										size="14"
+									/>
+								</button>
+								<span
+									class="text-sm text-white/80"
+									:aria-label="`${index === 0 ? 'عرض' : 'ارتفاع'}: ${dimension}`"
+								>
+									{{ dimension }}
+								</span>
+								<button
+									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+									type="button"
+									:aria-label="`افزایش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
+									:disabled="dimension >= 5"
+									@click="changeDimension(index as 0 | 1, 1)"
+								>
+									<Icon
+										name="lucide:plus"
+										size="14"
+									/>
+								</button>
 							</div>
 						</div>
-						<p class="mt-2 text-center text-[10px] text-white/30">عرض × ارتفاع</p>
+						<p class="mt-2 text-center text-[10px] text-white/30">
+							عرض × ارتفاع
+						</p>
 					</div>
 				</div>
 			</div>
-			</Transition>
-		</div>
+		</Transition>
+	</div>
 </template>

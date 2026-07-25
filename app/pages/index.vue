@@ -188,7 +188,7 @@ watch(words, (value) => {
 				class="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/35"
 			>
 				<span>
-					<kbd>Alt</kbd>
+					<kbd>Tab</kbd>
 					واژه‌ی بعدی
 				</span>
 				<span>
