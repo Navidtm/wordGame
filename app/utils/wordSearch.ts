@@ -1,3 +1,12 @@
+import type { FoundWord } from '~/types/types';
+
+interface FindWordsOptions {
+	minWordLength?: number;
+	maxResults?: number;
+	timeoutMs?: number;
+	signal?: AbortSignal;
+}
+
 /**
  * Performs a Boggle‑style word search on a grid of letters.
  *

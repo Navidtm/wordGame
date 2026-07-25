@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { FoundWord } from '~/types/types';
+
 const selected = defineModel<number>({ required: true });
 const { words } = defineProps<{ words?: FoundWord[] }>();
 const emit = defineEmits<{ submit: [] }>();
