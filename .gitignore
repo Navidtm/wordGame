@@ -27,3 +27,5 @@ logs
 coverage/
 gen
 music-player
+
+.agents
