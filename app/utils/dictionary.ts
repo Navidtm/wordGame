@@ -1,5 +1,9 @@
 import wordList from '../data/fa-IR.json';
 
+/** Normalizes dictionary spellings to the characters available on a board tile. */
+export const normalizeWord = (word: string): string =>
+	word.replaceAll('\u200c', '').replaceAll('ي', 'ی').replaceAll('ك', 'ک');
+
 /** Represents a single node in the Trie. */
 class TrieNode {
 	children = new Map<string, TrieNode>();
@@ -70,4 +74,4 @@ class WordDictionary {
 // ==================================================
 // Singleton Instance: Loaded Once, Reused Forever
 // ==================================================
-export const dictionary = new WordDictionary(wordList);
+export const dictionary = new WordDictionary([...new Set(wordList.map(normalizeWord))]);

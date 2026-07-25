@@ -73,7 +73,7 @@ const { selectedIndex, stepMode, pathStep, selectedPath, displayedPath, toggleSt
 	usePathSelection(results.words);
 
 const { aspect, maxResults, minWordLength, maxWordLength, hideThreeLetterWords } = settings;
-const { words } = results;
+const { words, isSearching } = results;
 
 watch(cellCount, settings.limitMaxWordLength, { immediate: true });
 onKeyStroke('r', event => {
@@ -121,6 +121,7 @@ onKeyStroke('r', event => {
 				:path="displayedPath"
 				:words="words"
 				:is-ready="isComplete"
+				:is-searching="isSearching"
 				:selected-path-length="selectedPath.length"
 				@clear="clear"
 				@remove="clearPath(displayedPath)"
@@ -130,10 +131,6 @@ onKeyStroke('r', event => {
 			<footer
 				class="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/35"
 			>
-				<span>
-					<kbd>Alt + Tab</kbd>
-					واژه‌ی بعدی
-				</span>
 				<span>
 					<kbd>Enter</kbd>
 					حذف واژه

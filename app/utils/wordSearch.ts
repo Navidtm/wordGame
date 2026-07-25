@@ -36,6 +36,8 @@ export const searchWordsInGrid = (
 			throw new Error(`Row ${i} has inconsistent length.`);
 		}
 	}
+	const maximumWordLength = Math.min(maxWordLength, rows * cols);
+	if (maximumWordLength < minWordLength || maxResults <= 0) return [];
 
 	// --- Directions for 8 adjacent moves (including diagonals) ---
 	const directions: [number, number][] = [
@@ -67,6 +69,11 @@ export const searchWordsInGrid = (
 				foundMap.set(newPrefix, [...path]);
 			}
 		}
+		if (newPrefix.length >= maximumWordLength) {
+			visited[row]![col] = false;
+			path.pop();
+			return;
+		}
 
 		for (const [dx, dy] of directions) {
 			const nx = row + dx;
@@ -88,7 +95,6 @@ export const searchWordsInGrid = (
 
 	const results: FoundWord[] = Array.from(foundMap.entries())
 		.map(([word, path]) => ({ word, path, score: computeScore(word) }))
-		.filter(({ word }) => word.length <= maxWordLength)
 		.sort((a, b) => (b.score !== a.score ? b.score - a.score : b.word.length - a.word.length))
 		.slice(0, maxResults);
 

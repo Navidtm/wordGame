@@ -23,6 +23,14 @@ describe('searchWordsInGrid', () => {
 		).toEqual([]);
 	});
 
+	it('stops searching once the configured maximum length is reached', () => {
+		const matches = searchWordsInGrid([['آ', 'ب']], {
+			minWordLength: 2,
+			maxWordLength: 2,
+		});
+		expect(matches.every(({ word }) => word.length <= 2)).toBe(true);
+	});
+
 	it('rejects non-rectangular grids', () => {
 		expect(() => searchWordsInGrid([['آ'], ['ب', 'پ']])).toThrow('inconsistent length');
 	});

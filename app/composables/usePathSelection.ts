@@ -1,8 +1,8 @@
-import type { ComputedRef } from 'vue';
+import type { Ref } from 'vue';
 
 import type { FoundWord } from '~/types/types';
 
-export const usePathSelection = (words: ComputedRef<FoundWord[]>) => {
+export const usePathSelection = (words: Readonly<Ref<FoundWord[]>>) => {
 	const selectedIndex = ref(0);
 	const stepMode = ref(false);
 	const pathStep = ref(0);

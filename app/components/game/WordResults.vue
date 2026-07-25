@@ -8,6 +8,7 @@ const pathStep = defineModel<number>('pathStep', { required: true });
 const { words, isReady, selectedPathLength } = defineProps<{
 	words: FoundWord[];
 	isReady: boolean;
+	isSearching: boolean;
 	selectedPathLength: number;
 }>();
 
@@ -15,25 +16,15 @@ const emit = defineEmits<{ remove: []; toggleStepMode: []; moveStep: [amount: nu
 
 const buttons = useTemplateRef('buttons');
 
-const { copied, copy } = useClipboard();
+const { copied, copy } = useClipboard({ legacy: true });
 
 const selectedWord = computed(() => words[selectedIndex.value]?.word ?? '');
+const allWords = computed(() => words.map(({ word }) => word).join('\n'));
 
 const focusWord = async (index: number) => {
 	await nextTick();
 	buttons.value?.[index]?.focus();
 };
-
-const selectNext = () => {
-	if (!words.length) return;
-	selectedIndex.value = (selectedIndex.value + 1) % words.length;
-	focusWord(selectedIndex.value);
-};
-
-onKeyStroke('Alt', event => {
-	event.preventDefault();
-	selectNext();
-});
 
 watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousCount]) => {
 	if (!ready || !count || (wasReady && previousCount)) return;
@@ -62,6 +53,18 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 				>
 					<Icon
 						:name="copied ? 'lucide:check' : 'lucide:copy'"
+						size="14"
+					/>
+				</button>
+				<button
+					v-if="words.length"
+					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-white/60 transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
+					type="button"
+					:aria-label="copied ? 'فهرست واژه‌ها کپی شد' : 'کپی همهٔ واژه‌ها'"
+					@click="copy(allWords)"
+				>
+					<Icon
+						name="lucide:copy-plus"
 						size="14"
 					/>
 				</button>
@@ -117,7 +120,13 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 			</div>
 		</div>
 		<div
-			v-if="!isReady"
+			v-if="isSearching"
+			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-white/40"
+		>
+			در حال جست‌وجوی واژه‌ها…
+		</div>
+		<div
+			v-else-if="!isReady"
 			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-white/40"
 		>
 			همه‌ی خانه‌ها را با یک حرف پر کنید

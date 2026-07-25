@@ -10,7 +10,14 @@ export const useGameSettings = () => {
 	);
 
 	watch([minWordLength, maxWordLength], () => {
-		if (minWordLength.value > maxWordLength.value) maxWordLength.value = minWordLength.value;
+		minWordLength.value = Math.max(
+			3,
+			Number.isFinite(minWordLength.value) ? minWordLength.value : 3,
+		);
+		maxWordLength.value = Math.max(
+			minWordLength.value,
+			Number.isFinite(maxWordLength.value) ? maxWordLength.value : minWordLength.value,
+		);
 	});
 	const limitMaxWordLength = (cellCount: number) => {
 		maxWordLength.value = Math.min(maxWordLength.value, cellCount);
