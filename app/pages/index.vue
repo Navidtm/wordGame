@@ -1,6 +1,57 @@
 <script setup lang="ts">
 import { chunk } from 'es-toolkit';
 
+const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/$/, '');
+const title = 'حل‌کنندهٔ جدول واژهٔ فارسی';
+const description =
+	'حروف جدول واژه را وارد کنید تا واژه‌های فارسی قابل ساخت، مسیر دقیق حروف و نتایج فیلترشده را سریع پیدا کنید.';
+const shareImage = siteUrl
+	? `${siteUrl}/screenshots/solver-results.png`
+	: undefined;
+
+useSeoMeta({
+	title,
+	description,
+	robots: 'index, follow',
+	ogTitle: title,
+	ogDescription: description,
+	ogType: 'website',
+	ogLocale: 'fa_IR',
+	ogUrl: siteUrl || undefined,
+	ogImage: shareImage,
+	ogImageAlt: 'نمای ابزار شکار واژه، حل‌کنندهٔ جدول واژهٔ فارسی',
+	twitterCard: 'summary_large_image',
+	twitterTitle: title,
+	twitterDescription: description,
+	twitterImage: shareImage,
+});
+
+useHead(() => ({
+	meta: [
+		{
+			name: 'keywords',
+			content:
+				'حل جدول واژه, حل کننده Boggle فارسی, واژه یاب فارسی, جدول حروف, شکار واژه',
+		},
+	],
+	link: siteUrl ? [{ rel: 'canonical', href: siteUrl }] : [],
+	script: [
+		{
+			type: 'application/ld+json',
+			innerHTML: JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'WebApplication',
+				name: 'شکار واژه',
+				applicationCategory: 'UtilitiesApplication',
+				operatingSystem: 'Web',
+				inLanguage: 'fa-IR',
+				description,
+				...(siteUrl ? { url: siteUrl } : {}),
+			}),
+		},
+	],
+}));
+
 const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(Array(aspect.value[0] * aspect.value[1]).fill(''));
@@ -111,10 +162,8 @@ watch(words, (value) => {
 						/>
 					</div>
 					<div>
-						<p
-							class="mb-1 text-[10px] font-medium tracking-[.22em] text-sky-300/70"
-						>
-							PERSIAN WORD GAME
+						<p class="mb-1 text-[10px] font-medium text-sky-300/70">
+							حل‌کنندهٔ جدول واژهٔ فارسی
 						</p>
 						<h1
 							class="text-2xl font-medium tracking-tight text-white sm:text-3xl"
@@ -169,7 +218,7 @@ watch(words, (value) => {
 							</h2>
 						</div>
 						<p class="mt-1 text-xs text-white/40">
-							حروف مجاور را به هم وصل کنید
+							حروف جدول را وارد کنید تا واژه‌ها و مسیرشان پیدا شوند
 						</p>
 					</div>
 					<div class="flex items-center gap-2">

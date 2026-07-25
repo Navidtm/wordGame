@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow:
+
+# Set NUXT_PUBLIC_SITE_URL in Vercel to enable the canonical URL and social previews.

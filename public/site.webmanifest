@@ -1,0 +1,17 @@
+{
+  "name": "شکار واژه | حل‌کنندهٔ جدول واژهٔ فارسی",
+  "short_name": "شکار واژه",
+  "lang": "fa",
+  "dir": "rtl",
+  "display": "standalone",
+  "background_color": "#090d10",
+  "theme_color": "#090d10",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
