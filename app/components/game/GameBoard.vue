@@ -37,7 +37,7 @@ const emit = defineEmits<{
 <template>
 	<section
 		id="game-board"
-		class="premium-panel relative overflow-hidden rounded-[1.75rem] bg-[#13191d]/60 shadow-[0_24px_80px_rgba(0,0,0,.45)] backdrop-blur-xl"
+		class="premium-panel relative overflow-hidden rounded-[1.75rem] bg-[#13191d]/60 shadow-[0_18px_56px_rgba(0,0,0,.42)] backdrop-blur-lg"
 		aria-labelledby="board-title"
 	>
 		<div
@@ -56,7 +56,7 @@ const emit = defineEmits<{
 						جدول حروف
 					</h2>
 				</div>
-				<p class="mt-1 text-xs text-white/40">
+				<p class="mt-1 text-xs text-content-muted">
 					حروف جدول را وارد کنید تا واژه‌ها و مسیرشان پیدا شوند
 				</p>
 			</div>

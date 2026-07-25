@@ -48,20 +48,22 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 							class="text-sky-300"
 						/><span>تنظیمات بازی</span>
 					</div>
-					<p class="mt-1 pr-6 text-[11px] text-white/40">نمای بازی را مطابق سلیقه‌تان تنظیم کنید</p>
+					<p class="mt-1 pr-6 text-[11px] text-content-muted">
+						نمای بازی را مطابق سلیقه‌تان تنظیم کنید
+					</p>
 				</div>
 				<div class="space-y-5 p-4 pt-3">
 					<fieldset>
 						<legend class="mb-2 flex w-full items-center justify-between text-xs">
-							<span class="text-white/50">طول واژه</span
-							><span class="text-white/35">حداقل تا حداکثر</span>
+							<span class="text-content-muted">طول واژه</span
+							><span class="text-content-subtle">حداقل تا حداکثر</span>
 						</legend>
 						<div
 							class="grid grid-cols-2 gap-2"
 							dir="ltr"
 						>
 							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
-								<span class="block text-[10px] text-white/40">MIN</span>
+								<span class="block text-[10px] text-content-muted">MIN</span>
 								<input
 									v-model.number="minWordLength"
 									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
@@ -72,7 +74,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 								/>
 							</label>
 							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
-								><span class="block text-[10px] text-white/40">MAX</span
+								><span class="block text-[10px] text-content-muted">MAX</span
 								><input
 									v-model.number="maxWordLength"
 									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
@@ -83,7 +85,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 							/></label>
 						</div>
 						<label
-							class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-white/65"
+							class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-content-muted"
 							><span>مخفی‌کردن واژه‌های سه‌حرفی</span
 							><input
 								v-model="hideThreeLetterWords"
@@ -93,7 +95,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 					</fieldset>
 					<fieldset>
 						<legend class="mb-2 flex w-full items-center justify-between text-xs">
-							<span class="text-white/50">تعداد واژه‌ها</span
+							<span class="text-content-muted">تعداد واژه‌ها</span
 							><span class="rounded-lg bg-sky-400/10 px-2 py-1 text-sky-100">{{ maxResults }}</span>
 						</legend>
 						<div
@@ -107,7 +109,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 								:class="
 									maxResults === count
 										? 'bg-sky-400/20 text-sky-100 shadow-sm'
-										: 'text-white/40 hover:text-white/75'
+										: 'text-content-muted hover:text-content-strong'
 								"
 								type="button"
 								@click="maxResults = count"
@@ -117,7 +119,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 						</div>
 					</fieldset>
 					<fieldset>
-						<legend class="mb-2 text-xs text-white/50">اندازه جدول</legend>
+						<legend class="mb-2 text-xs text-content-muted">اندازه جدول</legend>
 						<div
 							class="grid grid-cols-2 gap-2"
 							dir="ltr"
@@ -128,7 +130,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 								class="flex items-center justify-between rounded-xl bg-black/20 p-1"
 							>
 								<button
-									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
+									class="grid size-9 place-items-center rounded-lg text-content-muted transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
 									type="button"
 									:aria-label="`کاهش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension <= 2"
@@ -138,9 +140,9 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 										name="lucide:minus"
 										size="14"
 									/></button
-								><span class="text-sm text-white/80">{{ dimension }}</span
+								><span class="text-sm text-content-strong">{{ dimension }}</span
 								><button
-									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
+									class="grid size-9 place-items-center rounded-lg text-content-muted transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
 									type="button"
 									:aria-label="`افزایش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension >= 5"
@@ -153,7 +155,7 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 								</button>
 							</div>
 						</div>
-						<p class="mt-2 text-center text-[10px] text-white/30">عرض × ارتفاع</p>
+						<p class="mt-2 text-center text-[10px] text-content-subtle">عرض × ارتفاع</p>
 					</fieldset>
 				</div>
 			</div>

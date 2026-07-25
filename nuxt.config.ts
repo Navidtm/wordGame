@@ -26,6 +26,13 @@ export default defineNuxtConfig({
 				{ name: 'color-scheme', content: 'dark' },
 			],
 			link: [
+				{
+					rel: 'preload',
+					href: '/fonts/iransans-300.woff2',
+					as: 'font',
+					type: 'font/woff2',
+					crossorigin: 'anonymous',
+				},
 				{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
 				{ rel: 'shortcut icon', href: '/favicon.ico' },
 				{ rel: 'manifest', href: '/site.webmanifest' },

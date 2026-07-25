@@ -129,7 +129,7 @@ onKeyStroke('r', event => {
 				@move-step="moveStep"
 			/>
 			<footer
-				class="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/35"
+				class="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-content-subtle"
 			>
 				<span>
 					<kbd>Enter</kbd>

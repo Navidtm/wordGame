@@ -38,7 +38,7 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 		<div class="mb-3 flex items-start justify-between gap-3">
 			<div>
 				<h2 class="text-sm font-medium text-white">واژه‌های پیدا شده</h2>
-				<p class="mt-1 text-[11px] text-white/35">بهترین ترکیب‌ها برای این جدول</p>
+				<p class="mt-1 text-[11px] text-content-subtle">بهترین ترکیب‌ها برای این جدول</p>
 			</div>
 			<div class="flex flex-wrap justify-end gap-1.5">
 				<span class="rounded-xl bg-sky-400/10 px-2.5 py-1.5 text-[11px] text-sky-100/65">
@@ -46,7 +46,7 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 				</span>
 				<button
 					v-if="words.length"
-					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-white/60 transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
+					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-content-muted transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
 					type="button"
 					:aria-label="copied ? 'واژه کپی شد' : 'کپی واژهٔ انتخاب‌شده'"
 					@click="copy(selectedWord)"
@@ -58,7 +58,7 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 				</button>
 				<button
 					v-if="words.length"
-					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-white/60 transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
+					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-content-muted transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
 					type="button"
 					:aria-label="copied ? 'فهرست واژه‌ها کپی شد' : 'کپی همهٔ واژه‌ها'"
 					@click="copy(allWords)"
@@ -72,7 +72,7 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 		</div>
 		<div
 			v-if="words.length && selectedPathLength"
-			class="mb-3 flex items-center justify-between rounded-xl bg-black/15 p-1.5 text-xs text-white/55"
+			class="mb-3 flex items-center justify-between rounded-xl bg-black/15 p-1.5 text-xs text-content-muted"
 		>
 			<button
 				class="min-h-9 rounded-lg px-2 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
@@ -121,19 +121,19 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 		</div>
 		<div
 			v-if="isSearching"
-			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-white/40"
+			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-content-muted"
 		>
 			در حال جست‌وجوی واژه‌ها…
 		</div>
 		<div
 			v-else-if="!isReady"
-			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-white/40"
+			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-content-muted"
 		>
 			همه‌ی خانه‌ها را با یک حرف پر کنید
 		</div>
 		<div
 			v-else-if="!words.length"
-			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-white/40"
+			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-content-muted"
 		>
 			واژه‌ای در این جدول پیدا نشد
 		</div>
@@ -150,7 +150,7 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 				:class="
 					selectedIndex === index
 						? 'bg-gradient-to-l from-sky-500/22 to-teal-500/12 text-white shadow-[0_8px_22px_rgba(14,116,144,.12)]'
-						: 'text-white/75 hover:-translate-y-px hover:bg-white/[.075]'
+						: 'text-content-strong hover:-translate-y-px hover:bg-white/[.075]'
 				"
 				:aria-pressed="selectedIndex === index"
 				:aria-label="

@@ -11,7 +11,7 @@ const { label, active = false } = defineProps<{
 		:class="
 			active
 				? 'bg-sky-400/18 text-sky-100'
-				: 'bg-white/[.055] text-white/60 hover:bg-white/10 hover:text-white'
+				: 'bg-white/[.055] text-content-muted hover:bg-white/10 hover:text-white'
 		"
 		type="button"
 		:aria-label="label"

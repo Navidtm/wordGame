@@ -21,7 +21,7 @@ defineProps<{
 				/>
 			</div>
 			<div>
-				<p class="mb-1 text-[10px] font-medium text-sky-300/70">حل‌کنندهٔ جدول واژهٔ فارسی</p>
+				<p class="mb-1 text-[10px] font-medium text-sky-200">حل‌کنندهٔ جدول واژهٔ فارسی</p>
 				<h1 class="text-2xl font-medium tracking-tight text-white sm:text-3xl">شکار واژه</h1>
 			</div>
 		</div>
@@ -36,7 +36,7 @@ defineProps<{
 				<span class="text-xl leading-none font-medium text-white">
 					{{ filledCells }}
 				</span>
-				<span class="text-sm text-white/35">/ {{ cellCount }}</span>
+				<span class="text-sm text-content-subtle">/ {{ cellCount }}</span>
 			</div>
 			<div class="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
 				<div
