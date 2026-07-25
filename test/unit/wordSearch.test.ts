@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
+
 import { searchWordsInGrid } from '../../app/utils/wordSearch';
 
 describe('searchWordsInGrid', () => {
 	it('finds an adjacent dictionary word and reports its path', () => {
 		const matches = searchWordsInGrid([['آ', 'ب']], { minWordLength: 2 });
 		expect(matches).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({ word: 'آب', path: [0, 1] }),
-			]),
+			expect.arrayContaining([expect.objectContaining({ word: 'آب', path: [0, 1] })]),
 		);
 	});
 
@@ -25,8 +24,6 @@ describe('searchWordsInGrid', () => {
 	});
 
 	it('rejects non-rectangular grids', () => {
-		expect(() => searchWordsInGrid([['آ'], ['ب', 'پ']])).toThrow(
-			'inconsistent length',
-		);
+		expect(() => searchWordsInGrid([['آ'], ['ب', 'پ']])).toThrow('inconsistent length');
 	});
 });

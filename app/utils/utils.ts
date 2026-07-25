@@ -1,9 +1,8 @@
-export const pathToWord = (path: number[], letters: string[]) =>
-	path.map((v) => letters[v]).join('');
+export const pathToWord = (path: number[], letters: string[]) => path.map(v => letters[v]).join('');
 
 /**
- * Calculates the score for a word based on its length.
- * Longer words receive higher scores.
+ * Calculates the score for a word based on its length. Longer words receive higher scores.
+ *
  * @param word - The word to evaluate.
  * @returns The computed score.
  */

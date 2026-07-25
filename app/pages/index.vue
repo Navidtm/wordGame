@@ -5,9 +5,7 @@ const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/$/, '');
 const title = 'حل‌کنندهٔ جدول واژهٔ فارسی';
 const description =
 	'حروف جدول واژه را وارد کنید تا واژه‌های فارسی قابل ساخت، مسیر دقیق حروف و نتایج فیلترشده را سریع پیدا کنید.';
-const shareImage = siteUrl
-	? `${siteUrl}/screenshots/solver-results.png`
-	: undefined;
+const shareImage = siteUrl ? `${siteUrl}/screenshots/solver-results.png` : undefined;
 
 useSeoMeta({
 	title,
@@ -30,8 +28,7 @@ useHead(() => ({
 	meta: [
 		{
 			name: 'keywords',
-			content:
-				'حل جدول واژه, حل کننده Boggle فارسی, واژه یاب فارسی, جدول حروف, شکار واژه',
+			content: 'حل جدول واژه, حل کننده Boggle فارسی, واژه یاب فارسی, جدول حروف, شکار واژه',
 		},
 	],
 	link: siteUrl ? [{ rel: 'canonical', href: siteUrl }] : [],
@@ -61,15 +58,13 @@ const hideThreeLetterWords = ref(false);
 const cellCount = computed(() => aspect.value[0] * aspect.value[1]);
 const filledCells = computed(() => chars.value.filter(Boolean).length);
 const boardReady = computed(() => filledCells.value === cellCount.value);
-const boardProgress = computed(
-	() => `${(filledCells.value / cellCount.value) * 100}%`,
-);
+const boardProgress = computed(() => `${(filledCells.value / cellCount.value) * 100}%`);
 const effectiveMinWordLength = computed(() =>
 	Math.max(minWordLength.value, hideThreeLetterWords.value ? 4 : 3),
 );
 
 const words = computed(() => {
-	if (chars.value.some((char) => !char)) return [];
+	if (chars.value.some(char => !char)) return [];
 	return searchWordsInGrid(chunk(chars.value, aspect.value[0]), {
 		minWordLength: effectiveMinWordLength.value,
 		maxWordLength: maxWordLength.value,
@@ -82,15 +77,13 @@ const stepMode = ref(false);
 const pathStep = ref(0);
 const selectedPath = computed(() => words.value?.[selected.value]?.path ?? []);
 const path = computed(() =>
-	stepMode.value
-		? selectedPath.value.slice(0, pathStep.value + 1)
-		: selectedPath.value,
+	stepMode.value ? selectedPath.value.slice(0, pathStep.value + 1) : selectedPath.value,
 );
 const clearedChars = ref<string[] | null>(null);
 const undoVisible = ref(false);
 let undoTimer: ReturnType<typeof setTimeout> | undefined;
 
-const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
+const submit = () => path.value?.forEach(n => (chars.value[n] = ''));
 
 const clearBoard = () => {
 	clearedChars.value = [...chars.value];
@@ -107,7 +100,7 @@ const undoClear = () => {
 	clearTimeout(undoTimer);
 };
 
-onKeyStroke('r', (event) => {
+onKeyStroke('r', event => {
 	if (!event.ctrlKey && !event.metaKey) return;
 	event.preventDefault();
 	chars.value.fill('');
@@ -119,16 +112,13 @@ watch(aspect, () => {
 });
 
 watch([minWordLength, maxWordLength], () => {
-	if (minWordLength.value > maxWordLength.value)
-		maxWordLength.value = minWordLength.value;
+	if (minWordLength.value > maxWordLength.value) maxWordLength.value = minWordLength.value;
 });
 
 watch(selected, () => (pathStep.value = 0));
 
-watch(words, (value) => {
-	selected.value = value.length
-		? Math.min(selected.value, value.length - 1)
-		: 0;
+watch(words, value => {
+	selected.value = value.length ? Math.min(selected.value, value.length - 1) : 0;
 });
 </script>
 <template>
@@ -141,7 +131,7 @@ watch(words, (value) => {
 			class="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_-10%,rgba(56,189,248,.17),transparent_37%),radial-gradient(circle_at_0%_80%,rgba(16,185,129,.10),transparent_28%),radial-gradient(circle_at_100%_65%,rgba(99,102,241,.09),transparent_30%)]"
 		></div>
 		<div
-			class="pointer-events-none fixed inset-0 opacity-[.035] [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:32px_32px]"
+			class="pointer-events-none fixed inset-0 [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:32px_32px] opacity-[.035]"
 		></div>
 		<div class="relative mx-auto w-full max-w-2xl">
 			<a
@@ -162,14 +152,8 @@ watch(words, (value) => {
 						/>
 					</div>
 					<div>
-						<p class="mb-1 text-[10px] font-medium text-sky-300/70">
-							حل‌کنندهٔ جدول واژهٔ فارسی
-						</p>
-						<h1
-							class="text-2xl font-medium tracking-tight text-white sm:text-3xl"
-						>
-							شکار واژه
-						</h1>
+						<p class="mb-1 text-[10px] font-medium text-sky-300/70">حل‌کنندهٔ جدول واژهٔ فارسی</p>
+						<h1 class="text-2xl font-medium tracking-tight text-white sm:text-3xl">شکار واژه</h1>
 					</div>
 				</div>
 				<div
@@ -180,7 +164,7 @@ watch(words, (value) => {
 					aria-label="پیشرفت تکمیل جدول"
 				>
 					<div class="flex items-baseline gap-1">
-						<span class="text-xl font-medium leading-none text-white">
+						<span class="text-xl leading-none font-medium text-white">
 							{{ filledCells }}
 						</span>
 						<span class="text-sm text-white/35">/ {{ cellCount }}</span>
@@ -202,9 +186,7 @@ watch(words, (value) => {
 				<div
 					class="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-sky-300/15 from-15% to-transparent"
 				></div>
-				<div
-					class="relative flex items-center justify-between gap-3 px-5 py-5 sm:px-6"
-				>
+				<div class="relative flex items-center justify-between gap-3 px-5 py-5 sm:px-6">
 					<div>
 						<div class="flex items-center gap-2">
 							<span
@@ -213,9 +195,8 @@ watch(words, (value) => {
 							<h2
 								id="board-title"
 								class="text-base font-medium text-white"
+								>جدول حروف</h2
 							>
-								جدول حروف
-							</h2>
 						</div>
 						<p class="mt-1 text-xs text-white/40">
 							حروف جدول را وارد کنید تا واژه‌ها و مسیرشان پیدا شوند
@@ -230,7 +211,7 @@ watch(words, (value) => {
 							v-model:hide-three-letter-words="hideThreeLetterWords"
 						/>
 						<button
-							class="grid size-11 place-items-center rounded-xl bg-white/[.055] text-white/60 transition duration-200 hover:bg-rose-400/15 hover:text-rose-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
+							class="grid size-11 place-items-center rounded-xl bg-white/[.055] text-white/60 transition duration-200 hover:bg-rose-400/15 hover:text-rose-200 focus:ring-2 focus:ring-rose-400/50 focus:outline-none active:scale-95"
 							type="button"
 							aria-label="پاک کردن جدول"
 							@click="clearBoard"
@@ -288,7 +269,7 @@ watch(words, (value) => {
 				>
 					<span>جدول پاک شد</span>
 					<button
-						class="min-h-11 rounded-xl bg-sky-400/15 px-3 font-medium text-sky-100 transition hover:bg-sky-400/25 focus:outline-none focus:ring-2 focus:ring-sky-400/60"
+						class="min-h-11 rounded-xl bg-sky-400/15 px-3 font-medium text-sky-100 transition hover:bg-sky-400/25 focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
 						type="button"
 						@click="undoClear"
 					>

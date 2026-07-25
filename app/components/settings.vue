@@ -36,7 +36,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 					? 'bg-sky-400/18 text-sky-100 shadow-[0_0_20px_rgba(56,189,248,.15)]'
 					: 'bg-white/[.055] text-white/60'
 			"
-			class="grid size-11 place-items-center rounded-xl transition duration-200 hover:bg-sky-400/15 hover:text-sky-100 active:scale-95 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+			class="grid size-11 place-items-center rounded-xl transition duration-200 hover:bg-sky-400/15 hover:text-sky-100 focus:ring-2 focus:ring-sky-500/50 focus:outline-none active:scale-95"
 			type="button"
 			aria-label="تنظیمات بازی"
 			:aria-expanded="isOpen"
@@ -56,9 +56,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 				role="dialog"
 				aria-label="تنظیمات بازی"
 			>
-				<div
-					class="bg-gradient-to-l from-sky-400/12 to-transparent px-4 py-3.5"
-				>
+				<div class="bg-gradient-to-l from-sky-400/12 to-transparent px-4 py-3.5">
 					<div class="flex items-center gap-2 text-sm text-white">
 						<Icon
 							name="lucide:sliders-horizontal"
@@ -67,9 +65,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 						/>
 						<span>تنظیمات بازی</span>
 					</div>
-					<p class="mt-1 pr-6 text-[11px] text-white/40">
-						نمای بازی را مطابق سلیقه‌تان تنظیم کنید
-					</p>
+					<p class="mt-1 pr-6 text-[11px] text-white/40">نمای بازی را مطابق سلیقه‌تان تنظیم کنید</p>
 				</div>
 				<div class="space-y-5 p-4 pt-3">
 					<div>
@@ -77,19 +73,42 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 							<span class="text-white/50">طول واژه</span>
 							<span class="text-white/35">حداقل تا حداکثر</span>
 						</div>
-						<div class="grid grid-cols-2 gap-2" dir="ltr">
+						<div
+							class="grid grid-cols-2 gap-2"
+							dir="ltr"
+						>
 							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
 								<span class="block text-[10px] text-white/40">MIN</span>
-								<input v-model.number="minWordLength" class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100" type="number" min="3" :max="maxWordLength" aria-label="حداقل طول واژه" />
+								<input
+									v-model.number="minWordLength"
+									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
+									type="number"
+									min="3"
+									:max="maxWordLength"
+									aria-label="حداقل طول واژه"
+								/>
 							</label>
 							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
 								<span class="block text-[10px] text-white/40">MAX</span>
-								<input v-model.number="maxWordLength" class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100" type="number" :min="minWordLength" max="25" aria-label="حداکثر طول واژه" />
+								<input
+									v-model.number="maxWordLength"
+									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
+									type="number"
+									:min="minWordLength"
+									max="25"
+									aria-label="حداکثر طول واژه"
+								/>
 							</label>
 						</div>
-						<label class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-white/65">
+						<label
+							class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-white/65"
+						>
 							<span>مخفی‌کردن واژه‌های سه‌حرفی</span>
-							<input v-model="hideThreeLetterWords" class="size-4 accent-sky-400" type="checkbox" />
+							<input
+								v-model="hideThreeLetterWords"
+								class="size-4 accent-sky-400"
+								type="checkbox"
+							/>
 						</label>
 					</div>
 					<div>
@@ -131,7 +150,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 								class="flex items-center justify-between rounded-xl bg-black/20 p-1"
 							>
 								<button
-									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
 									type="button"
 									:aria-label="`کاهش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension <= 2"
@@ -149,7 +168,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 									{{ dimension }}
 								</span>
 								<button
-									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-25 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
 									type="button"
 									:aria-label="`افزایش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension >= 5"
@@ -162,9 +181,7 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 								</button>
 							</div>
 						</div>
-						<p class="mt-2 text-center text-[10px] text-white/30">
-							عرض × ارتفاع
-						</p>
+						<p class="mt-2 text-center text-[10px] text-white/30">عرض × ارتفاع</p>
 					</div>
 				</div>
 			</div>

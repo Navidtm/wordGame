@@ -19,8 +19,13 @@ input {
 	font: inherit;
 }
 
-button { cursor: pointer; touch-action: manipulation; }
-button:disabled { cursor: not-allowed; }
+button {
+	cursor: pointer;
+	touch-action: manipulation;
+}
+button:disabled {
+	cursor: not-allowed;
+}
 
 .skip-link {
 	position: fixed;
@@ -37,7 +42,11 @@ button:disabled { cursor: not-allowed; }
 	transition: transform 180ms ease;
 }
 
-.skip-link:focus { transform: translateY(0); outline: 3px solid #38bdf8; outline-offset: 2px; }
+.skip-link:focus {
+	transform: translateY(0);
+	outline: 3px solid #38bdf8;
+	outline-offset: 2px;
+}
 
 .word-grid {
 	display: grid;
@@ -75,7 +84,9 @@ kbd {
 
 .settings-popover-enter-active,
 .settings-popover-leave-active {
-	transition: opacity 180ms ease, transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+	transition:
+		opacity 180ms ease,
+		transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .settings-popover-enter-from,
@@ -85,21 +96,38 @@ kbd {
 }
 
 .toast-enter-active,
-.toast-leave-active { transition: opacity 180ms ease, transform 180ms cubic-bezier(0.16, 1, 0.3, 1); }
+.toast-leave-active {
+	transition:
+		opacity 180ms ease,
+		transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
 .toast-enter-from,
-.toast-leave-to { opacity: 0; transform: translateY(0.5rem); }
+.toast-leave-to {
+	opacity: 0;
+	transform: translateY(0.5rem);
+}
 
 @keyframes panel-enter {
-	from { opacity: 0; transform: translateY(10px); }
-	to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes soft-pulse {
-	50% { transform: scale(0.96); }
+	50% {
+		transform: scale(0.96);
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	*, *::before, *::after {
+	*,
+	*::before,
+	*::after {
 		animation-duration: 1ms !important;
 		transition-duration: 1ms !important;
 	}

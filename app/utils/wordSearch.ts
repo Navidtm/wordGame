@@ -1,4 +1,5 @@
 import type { FoundWord } from '~/types/types';
+
 import { dictionary } from './dictionary';
 import { computeScore } from './utils';
 
@@ -19,11 +20,7 @@ export const searchWordsInGrid = (
 	grid: string[][],
 	options: FindWordsOptions = {},
 ): FoundWord[] => {
-	const {
-		minWordLength = 3,
-		maxWordLength = Infinity,
-		maxResults = 21,
-	} = options;
+	const { minWordLength = 3, maxWordLength = Infinity, maxResults = 21 } = options;
 
 	// --- Input Validation ---
 	if (!Array.isArray(grid) || grid.length === 0) {
@@ -52,18 +49,11 @@ export const searchWordsInGrid = (
 		[1, 1],
 	];
 
-	const visited: boolean[][] = Array.from({ length: rows }, () =>
-		Array(cols).fill(false),
-	);
+	const visited: boolean[][] = Array.from({ length: rows }, () => Array(cols).fill(false));
 	const foundMap = new Map<string, number[]>();
 	const index = (row: number, col: number): number => row * cols + col;
 
-	const dfs = (
-		row: number,
-		col: number,
-		prefix: string,
-		path: number[],
-	): void => {
+	const dfs = (row: number, col: number, prefix: string, path: number[]): void => {
 		if (visited[row]![col]) return;
 
 		const newPrefix = prefix + grid[row]![col];
@@ -99,9 +89,7 @@ export const searchWordsInGrid = (
 	const results: FoundWord[] = Array.from(foundMap.entries())
 		.map(([word, path]) => ({ word, path, score: computeScore(word) }))
 		.filter(({ word }) => word.length <= maxWordLength)
-		.sort((a, b) =>
-			b.score !== a.score ? b.score - a.score : b.word.length - a.word.length,
-		)
+		.sort((a, b) => (b.score !== a.score ? b.score - a.score : b.word.length - a.word.length))
 		.slice(0, maxResults);
 
 	return results;
