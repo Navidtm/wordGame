@@ -4,30 +4,37 @@ import type { FoundWord } from '~/types/types';
 const selectedIndex = defineModel<number>('selectedIndex', { required: true });
 const stepMode = defineModel<boolean>('stepMode', { required: true });
 const pathStep = defineModel<number>('pathStep', { required: true });
+
 const { words, isReady, selectedPathLength } = defineProps<{
 	words: FoundWord[];
 	isReady: boolean;
 	selectedPathLength: number;
 }>();
+
 const emit = defineEmits<{ remove: []; toggleStepMode: []; moveStep: [amount: number] }>();
+
 const buttons = useTemplateRef('buttons');
+
 const { copied, copy } = useClipboard();
+
 const selectedWord = computed(() => words[selectedIndex.value]?.word ?? '');
+
 const focusWord = async (index: number) => {
 	await nextTick();
 	buttons.value?.[index]?.focus();
 };
+
 const selectNext = () => {
 	if (!words.length) return;
 	selectedIndex.value = (selectedIndex.value + 1) % words.length;
 	focusWord(selectedIndex.value);
 };
-const copyAll = () => copy(words.map(({ word }) => word).join('\n'), 'all');
 
 onKeyStroke('Alt', event => {
 	event.preventDefault();
 	selectNext();
 });
+
 watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousCount]) => {
 	if (!ready || !count || (wasReady && previousCount)) return;
 	selectedIndex.value = 0;
@@ -50,23 +57,11 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 					v-if="words.length"
 					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-white/60 transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
 					type="button"
-					:aria-label="copied === 'word' ? 'واژه کپی شد' : 'کپی واژهٔ انتخاب‌شده'"
-					@click="copy(selectedWord, 'word')"
+					:aria-label="copied ? 'واژه کپی شد' : 'کپی واژهٔ انتخاب‌شده'"
+					@click="copy(selectedWord)"
 				>
 					<Icon
-						:name="copied === 'word' ? 'lucide:check' : 'lucide:copy'"
-						size="14"
-					/>
-				</button>
-				<button
-					v-if="words.length"
-					class="grid size-8 place-items-center rounded-lg bg-white/[.055] text-white/60 transition hover:bg-white/10 hover:text-white focus:ring-2 focus:ring-sky-400/60 focus:outline-none"
-					type="button"
-					:aria-label="copied === 'all' ? 'فهرست کپی شد' : 'کپی همهٔ واژه‌ها'"
-					@click="copyAll"
-				>
-					<Icon
-						:name="copied === 'all' ? 'lucide:check' : 'lucide:files'"
+						:name="copied ? 'lucide:check' : 'lucide:copy'"
 						size="14"
 					/>
 				</button>

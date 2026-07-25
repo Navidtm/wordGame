@@ -60,17 +60,18 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 							class="grid grid-cols-2 gap-2"
 							dir="ltr"
 						>
-							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
-								><span class="block text-[10px] text-white/40">MIN</span
-								><input
+							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
+								<span class="block text-[10px] text-white/40">MIN</span>
+								<input
 									v-model.number="minWordLength"
 									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
 									type="number"
 									min="3"
 									:max="maxWordLength"
 									aria-label="حداقل طول واژه"
-								/> </label
-							><label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
+								/>
+							</label>
+							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
 								><span class="block text-[10px] text-white/40">MAX</span
 								><input
 									v-model.number="maxWordLength"

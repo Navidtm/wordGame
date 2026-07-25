@@ -1,10 +1,6 @@
 {
-	"unocss.disable": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
 	"[vue]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	}
