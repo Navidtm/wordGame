@@ -3,8 +3,6 @@ import type { FoundWord } from '~/types/types';
 interface FindWordsOptions {
 	minWordLength?: number;
 	maxResults?: number;
-	timeoutMs?: number;
-	signal?: AbortSignal;
 }
 
 /**
@@ -14,16 +12,11 @@ interface FindWordsOptions {
  * @param options - Configuration options for the search.
  * @returns A promise that resolves to an array of the best words found.
  */
-export async function searchWordsInGrid(
+export const searchWordsInGrid = (
 	grid: string[][],
 	options: FindWordsOptions = {},
-): Promise<FoundWord[]> {
-	const {
-		minWordLength = 3,
-		maxResults = 12,
-		timeoutMs = 5000,
-		signal,
-	} = options;
+): FoundWord[] => {
+	const { minWordLength = 3, maxResults = 21 } = options;
 
 	// --- Input Validation ---
 	if (!Array.isArray(grid) || grid.length === 0) {
@@ -58,72 +51,50 @@ export async function searchWordsInGrid(
 	const foundMap = new Map<string, number[]>();
 	const index = (row: number, col: number): number => row * cols + col;
 
-	return new Promise((resolve, reject) => {
-		const timeoutId = setTimeout(() => {
-			reject(new Error(`Search timed out after ${timeoutMs}ms.`));
-		}, timeoutMs);
+	const dfs = (
+		row: number,
+		col: number,
+		prefix: string,
+		path: number[],
+	): void => {
+		if (visited[row]![col]) return;
 
-		if (signal) {
-			if (signal.aborted) {
-				clearTimeout(timeoutId);
-				reject(new Error('Search aborted.'));
-				return;
-			}
-			signal.addEventListener('abort', () => {
-				clearTimeout(timeoutId);
-				reject(new Error('Search aborted.'));
-			});
-		}
+		const newPrefix = prefix + grid[row]![col];
+		if (!dictionary.startsWith(newPrefix)) return;
 
-		const dfs = (
-			row: number,
-			col: number,
-			prefix: string,
-			path: number[],
-		): void => {
-			if (signal?.aborted) return;
-			if (visited[row]![col]) return;
+		path.push(index(row, col));
+		visited[row]![col] = true;
 
-			const newPrefix = prefix + grid[row]![col];
-			if (!dictionary.startsWith(newPrefix)) return;
-
-			path.push(index(row, col));
-			visited[row]![col] = true;
-
-			if (newPrefix.length >= minWordLength && dictionary.search(newPrefix)) {
-				if (!foundMap.has(newPrefix)) {
-					foundMap.set(newPrefix, [...path]);
-				}
-			}
-
-			for (const [dx, dy] of directions) {
-				const nx = row + dx;
-				const ny = col + dy;
-				if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
-					dfs(nx, ny, newPrefix, path);
-				}
-			}
-
-			visited[row]![col] = false;
-			path.pop();
-		};
-
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < cols; j++) {
-				if (signal?.aborted) break;
-				dfs(i, j, '', []);
+		if (newPrefix.length >= minWordLength && dictionary.search(newPrefix)) {
+			if (!foundMap.has(newPrefix)) {
+				foundMap.set(newPrefix, [...path]);
 			}
 		}
 
-		clearTimeout(timeoutId);
+		for (const [dx, dy] of directions) {
+			const nx = row + dx;
+			const ny = col + dy;
+			if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) {
+				dfs(nx, ny, newPrefix, path);
+			}
+		}
 
-		const results: FoundWord[] = Array.from(foundMap.entries())
-			.map(([word, path]) => ({ word, path, score: computeScore(word) }))
-			.sort((a, b) =>
-				b.score !== a.score ? b.score - a.score : a.word.length - b.word.length,
-			)
-			.slice(0, maxResults);
+		visited[row]![col] = false;
+		path.pop();
+	};
 
-		resolve(results);
-	});
-}
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < cols; j++) {
+			dfs(i, j, '', []);
+		}
+	}
+
+	const results: FoundWord[] = Array.from(foundMap.entries())
+		.map(([word, path]) => ({ word, path, score: computeScore(word) }))
+		.sort((a, b) =>
+			b.score !== a.score ? b.score - a.score : a.word.length - b.word.length,
+		)
+		.slice(0, maxResults);
+
+	return results;
+};

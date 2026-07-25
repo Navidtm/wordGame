@@ -5,22 +5,14 @@ const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(Array(aspect.value[0] * aspect.value[1]).fill(''));
 
-const body = computed(() => ({
-	grid: chunk(chars.value, aspect.value[0]),
-	maxResults: 21,
-}));
-
-const words = asyncComputed(() =>
-	chars.value.filter(Boolean).length == 16
-		? searchWordsInGrid(body.value.grid, { ...body.value }).then((v) =>
-				v.slice(0, maxResults.value),
-			)
-		: [],
-);
-
-const path = computed(() => words.value?.[selected.value]?.path);
+const words = computed(() => {
+	if (chars.value.filter(Boolean).length !== 16) return [];
+	const result = searchWordsInGrid(chunk(chars.value, aspect.value[0]));
+	return result.slice(0, maxResults.value);
+});
 
 const selected = ref(0);
+const path = computed(() => words.value?.[selected.value]?.path);
 
 const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
 
