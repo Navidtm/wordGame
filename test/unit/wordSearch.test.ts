@@ -15,6 +15,15 @@ describe('searchWordsInGrid', () => {
 		expect(searchWordsInGrid([['آ', '']])).toEqual([]);
 	});
 
+	it('filters out words longer than the configured maximum length', () => {
+		expect(
+			searchWordsInGrid([['آ', 'ب']], {
+				minWordLength: 2,
+				maxWordLength: 1,
+			}),
+		).toEqual([]);
+	});
+
 	it('rejects non-rectangular grids', () => {
 		expect(() => searchWordsInGrid([['آ'], ['ب', 'پ']])).toThrow(
 			'inconsistent length',

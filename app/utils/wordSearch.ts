@@ -4,6 +4,7 @@ import { computeScore } from './utils';
 
 interface FindWordsOptions {
 	minWordLength?: number;
+	maxWordLength?: number;
 	maxResults?: number;
 }
 
@@ -18,7 +19,11 @@ export const searchWordsInGrid = (
 	grid: string[][],
 	options: FindWordsOptions = {},
 ): FoundWord[] => {
-	const { minWordLength = 3, maxResults = 21 } = options;
+	const {
+		minWordLength = 3,
+		maxWordLength = Infinity,
+		maxResults = 21,
+	} = options;
 
 	// --- Input Validation ---
 	if (!Array.isArray(grid) || grid.length === 0) {
@@ -93,6 +98,7 @@ export const searchWordsInGrid = (
 
 	const results: FoundWord[] = Array.from(foundMap.entries())
 		.map(([word, path]) => ({ word, path, score: computeScore(word) }))
+		.filter(({ word }) => word.length <= maxWordLength)
 		.sort((a, b) =>
 			b.score !== a.score ? b.score - a.score : b.word.length - a.word.length,
 		)

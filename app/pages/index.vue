@@ -4,21 +4,37 @@ import { chunk } from 'es-toolkit';
 const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(Array(aspect.value[0] * aspect.value[1]).fill(''));
+const minWordLength = ref(3);
+const maxWordLength = ref(16);
+const hideThreeLetterWords = ref(false);
 const cellCount = computed(() => aspect.value[0] * aspect.value[1]);
 const filledCells = computed(() => chars.value.filter(Boolean).length);
 const boardReady = computed(() => filledCells.value === cellCount.value);
 const boardProgress = computed(
 	() => `${(filledCells.value / cellCount.value) * 100}%`,
 );
+const effectiveMinWordLength = computed(() =>
+	Math.max(minWordLength.value, hideThreeLetterWords.value ? 4 : 3),
+);
 
 const words = computed(() => {
 	if (chars.value.some((char) => !char)) return [];
-	const result = searchWordsInGrid(chunk(chars.value, aspect.value[0]));
-	return result.slice(0, maxResults.value);
+	return searchWordsInGrid(chunk(chars.value, aspect.value[0]), {
+		minWordLength: effectiveMinWordLength.value,
+		maxWordLength: maxWordLength.value,
+		maxResults: maxResults.value,
+	});
 });
 
 const selected = ref(0);
-const path = computed(() => words.value?.[selected.value]?.path);
+const stepMode = ref(false);
+const pathStep = ref(0);
+const selectedPath = computed(() => words.value?.[selected.value]?.path ?? []);
+const path = computed(() =>
+	stepMode.value
+		? selectedPath.value.slice(0, pathStep.value + 1)
+		: selectedPath.value,
+);
 const clearedChars = ref<string[] | null>(null);
 const undoVisible = ref(false);
 let undoTimer: ReturnType<typeof setTimeout> | undefined;
@@ -47,8 +63,16 @@ onKeyStroke('r', (event) => {
 });
 watch(aspect, () => {
 	chars.value = Array(cellCount.value).fill('');
+	maxWordLength.value = Math.min(maxWordLength.value, cellCount.value);
 	selected.value = 0;
 });
+
+watch([minWordLength, maxWordLength], () => {
+	if (minWordLength.value > maxWordLength.value)
+		maxWordLength.value = minWordLength.value;
+});
+
+watch(selected, () => (pathStep.value = 0));
 
 watch(words, (value) => {
 	selected.value = value.length
@@ -152,6 +176,9 @@ watch(words, (value) => {
 						<Settings
 							v-model:aspect="aspect"
 							v-model:max-results="maxResults"
+							v-model:min-word-length="minWordLength"
+							v-model:max-word-length="maxWordLength"
+							v-model:hide-three-letter-words="hideThreeLetterWords"
 						/>
 						<button
 							class="grid size-11 place-items-center rounded-xl bg-white/[.055] text-white/60 transition duration-200 hover:bg-rose-400/15 hover:text-rose-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-rose-400/50"
@@ -178,8 +205,11 @@ watch(words, (value) => {
 				></div>
 				<WordTable
 					v-model="selected"
+					v-model:step-mode="stepMode"
+					v-model:path-step="pathStep"
 					:words
 					:is-ready="boardReady"
+					:selected-path-length="selectedPath.length"
 					@submit="submit"
 				/>
 			</section>

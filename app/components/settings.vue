@@ -2,6 +2,11 @@
 const [isOpen, toggle] = useToggle(false);
 const aspect = defineModel<[number, number]>('aspect', { required: true });
 const maxResults = defineModel<number>('maxResults', { required: true });
+const minWordLength = defineModel<number>('minWordLength', { required: true });
+const maxWordLength = defineModel<number>('maxWordLength', { required: true });
+const hideThreeLetterWords = defineModel<boolean>('hideThreeLetterWords', {
+	required: true,
+});
 
 const el = useTemplateRef('settings');
 onClickOutside(el, () => isOpen.value && toggle());
@@ -67,6 +72,26 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 					</p>
 				</div>
 				<div class="space-y-5 p-4 pt-3">
+					<div>
+						<div class="mb-2 flex items-center justify-between text-xs">
+							<span class="text-white/50">طول واژه</span>
+							<span class="text-white/35">حداقل تا حداکثر</span>
+						</div>
+						<div class="grid grid-cols-2 gap-2" dir="ltr">
+							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
+								<span class="block text-[10px] text-white/40">MIN</span>
+								<input v-model.number="minWordLength" class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100" type="number" min="3" :max="maxWordLength" aria-label="حداقل طول واژه" />
+							</label>
+							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
+								<span class="block text-[10px] text-white/40">MAX</span>
+								<input v-model.number="maxWordLength" class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100" type="number" :min="minWordLength" max="25" aria-label="حداکثر طول واژه" />
+							</label>
+						</div>
+						<label class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-white/65">
+							<span>مخفی‌کردن واژه‌های سه‌حرفی</span>
+							<input v-model="hideThreeLetterWords" class="size-4 accent-sky-400" type="checkbox" />
+						</label>
+					</div>
 					<div>
 						<div class="mb-2 flex items-center justify-between text-xs">
 							<span class="text-white/50">تعداد واژه‌ها</span>
