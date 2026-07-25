@@ -15,6 +15,7 @@ export default defineNuxtConfig({
 		viteEnvironmentApi: true,
 		typescriptPlugin: true,
 		typedPages: true,
+		watcher: 'builder',
 	},
 
 	vite: {

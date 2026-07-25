@@ -10,7 +10,7 @@ interface FindWordsOptions {
  *
  * @param grid - A 2D array representing the letter grid (rows x columns).
  * @param options - Configuration options for the search.
- * @returns A promise that resolves to an array of the best words found.
+ * @returns An array of the best words found.
  */
 export const searchWordsInGrid = (
 	grid: string[][],
@@ -92,7 +92,7 @@ export const searchWordsInGrid = (
 	const results: FoundWord[] = Array.from(foundMap.entries())
 		.map(([word, path]) => ({ word, path, score: computeScore(word) }))
 		.sort((a, b) =>
-			b.score !== a.score ? b.score - a.score : a.word.length - b.word.length,
+			b.score !== a.score ? b.score - a.score : b.word.length - a.word.length,
 		)
 		.slice(0, maxResults);
 

@@ -5,7 +5,15 @@ const selected = defineModel<number>({ required: true });
 const { words } = defineProps<{ words?: FoundWord[] }>();
 const emit = defineEmits<{ submit: [] }>();
 
-onKeyStroke(['Alt'], () => selected.value++);
+const selectNext = () => {
+	if (words?.length) selected.value = (selected.value + 1) % words.length;
+};
+
+onKeyStroke(['Alt'], (event) => {
+	event.preventDefault();
+	selectNext();
+});
+
 onKeyStroke(['Enter'], () => emit('submit'));
 </script>
 <template>

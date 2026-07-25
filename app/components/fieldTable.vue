@@ -10,13 +10,38 @@ const { path = [], aspect } = defineProps<{
 
 const inputs = useTemplateRef('inputs');
 
-// const parseInput = (char: string) =>
-// /[ا-ی]/.test(char) ? char : persianMap.get(char.toLowerCase()) || '';
+const parseInput = (value: string) => {
+	const char = Array.from(value).at(-1) ?? '';
+	const normalized = char.replace('ي', 'ی').replace('ك', 'ک');
+	return /[آ-ی]/.test(normalized)
+		? normalized
+		: (persianMap.get(normalized.toLowerCase()) ?? '');
+};
 
 const focus = (n: number): void => inputs.value?.[n]?.focus();
 
-onStartTyping(() => focus(0));
-watch(chars.value, (v) => focus(v.indexOf('')));
+const firstEmptyIndex = () => chars.value.indexOf('');
+
+const handleInput = (index: number, event: Event) => {
+	const input = event.target as HTMLInputElement;
+	chars.value[index] = parseInput(input.value);
+	input.value = chars.value[index]!;
+	if (chars.value[index] && index < chars.value.length - 1)
+		focus(firstEmptyIndex());
+};
+
+const handleBackspace = (index: number) => {
+	if (chars.value[index]) {
+		chars.value[index] = '';
+		return;
+	}
+	if (index > 0) {
+		chars.value[index - 1] = '';
+		focus(index - 1);
+	}
+};
+
+onStartTyping(() => focus(Math.max(0, firstEmptyIndex())));
 </script>
 <template>
 	<div
@@ -28,10 +53,13 @@ watch(chars.value, (v) => focus(v.indexOf('')));
 			:key="n"
 			ref="inputs"
 			ref_for
-			v-model="chars[n]"
+			:value="chars[n]"
+			maxlength="1"
+			inputmode="text"
 			class="rounded-md border border-black/30 w-14 h-12 text-center transition-all hover:opacity-80 outline-none ring-3 ring-transparent focus:ring-sky-800"
 			:class="path.includes(n) ? 'bg-gray-700' : 'bg-gray-800'"
-			@keyup.delete="chars[chars[n] ? n : n - 1] = ''"
+			@input="handleInput(n, $event)"
+			@keydown.backspace.prevent="handleBackspace(n)"
 		/>
 		<!-- @input="({ data }) => (chars[n] = parseInput(data ?? ''))" -->
 	</div>

@@ -4,9 +4,10 @@ import { chunk } from 'es-toolkit';
 const maxResults = ref(12);
 const aspect = ref<[number, number]>([4, 4]);
 const chars = ref(Array(aspect.value[0] * aspect.value[1]).fill(''));
+const cellCount = computed(() => aspect.value[0] * aspect.value[1]);
 
 const words = computed(() => {
-	if (chars.value.filter(Boolean).length !== 16) return [];
+	if (chars.value.some((char) => !char)) return [];
 	const result = searchWordsInGrid(chunk(chars.value, aspect.value[0]));
 	return result.slice(0, maxResults.value);
 });
@@ -17,6 +18,16 @@ const path = computed(() => words.value?.[selected.value]?.path);
 const submit = () => path.value?.forEach((n) => (chars.value[n] = ''));
 
 onKeyStroke(['Control'], () => chars.value.fill(''));
+watch(aspect, () => {
+	chars.value = Array(cellCount.value).fill('');
+	selected.value = 0;
+});
+
+watch(words, (value) => {
+	selected.value = value.length
+		? Math.min(selected.value, value.length - 1)
+		: 0;
+});
 </script>
 <template>
 	<div class="flex items-center justify-center flex-col h-dvh gap-3 p-4">
