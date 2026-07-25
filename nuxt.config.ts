@@ -3,9 +3,9 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
-	devtools: { enabled: true },
+	devtools: { enabled: process.env.NODE_ENV === 'development' },
 
-	modules: ['@vueuse/nuxt', '@nuxt/test-utils', '@unocss/nuxt', '@nuxt/icon'],
+	modules: ['@vueuse/nuxt', '@unocss/nuxt', '@nuxt/icon'],
 
 	ssr: true,
 
