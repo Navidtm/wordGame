@@ -35,13 +35,16 @@ export default defineNuxtConfig({
 				},
 				{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
 				{ rel: 'shortcut icon', href: '/favicon.ico' },
-				{ rel: 'manifest', href: '/site.webmanifest' },
 			],
 		},
 	},
 
 	routeRules: {
 		'/': { prerender: true },
+	},
+
+	features: {
+		inlineStyles: true,
 	},
 
 	css: ['~/assets/css/main.css'],
