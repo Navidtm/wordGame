@@ -45,10 +45,4 @@ export default defineNuxtConfig({
 		typedPages: true,
 		watcher: 'builder',
 	},
-
-	vite: {
-		optimizeDeps: {
-			include: ['es-toolkit'],
-		},
-	},
 });

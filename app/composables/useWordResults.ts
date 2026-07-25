@@ -1,4 +1,4 @@
-import { chunk } from 'es-toolkit';
+import chunk from 'es-toolkit/compat/chunk';
 import type { Ref } from 'vue';
 
 import type { FoundWord } from '~/types/types';

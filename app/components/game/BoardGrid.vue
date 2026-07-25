@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { range } from 'es-toolkit';
+import range from 'es-toolkit/compat/range';
 
 import { persianMap } from '~/utils/utils';
 
