@@ -1,53 +1,37 @@
 <script setup lang="ts">
-const [isOpen, toggle] = useToggle(false);
 const aspect = defineModel<[number, number]>('aspect', { required: true });
 const maxResults = defineModel<number>('maxResults', { required: true });
 const minWordLength = defineModel<number>('minWordLength', { required: true });
 const maxWordLength = defineModel<number>('maxWordLength', { required: true });
-const hideThreeLetterWords = defineModel<boolean>('hideThreeLetterWords', {
-	required: true,
-});
+const hideThreeLetterWords = defineModel<boolean>('hideThreeLetterWords', { required: true });
+const [isOpen, toggle] = useToggle(false);
+const element = useTemplateRef('popover');
 
-const el = useTemplateRef('settings');
-onClickOutside(el, () => isOpen.value && toggle());
-onKeyStroke('Escape', () => {
-	if (isOpen.value) toggle(false);
-});
-
-const setDimension = (index: 0 | 1, value: string | number) => {
-	const dimension = Math.min(5, Math.max(2, Number(value) || 2));
+const setDimension = (index: 0 | 1, amount: number) => {
 	const next = [...aspect.value] as [number, number];
-	next[index] = dimension;
+	next[index] = Math.min(5, Math.max(2, next[index] + amount));
 	aspect.value = next;
 };
-
-const changeDimension = (index: 0 | 1, amount: number) =>
-	setDimension(index, aspect.value[index] + amount);
+onClickOutside(element, () => isOpen.value && toggle(false));
+onKeyStroke('Escape', () => isOpen.value && toggle(false));
 </script>
+
 <template>
 	<div
-		ref="settings"
+		ref="popover"
 		class="relative"
 	>
-		<button
+		<UiIconButton
+			label="تنظیمات بازی"
+			:active="isOpen"
 			@click="toggle()"
-			:class="
-				isOpen
-					? 'bg-sky-400/18 text-sky-100 shadow-[0_0_20px_rgba(56,189,248,.15)]'
-					: 'bg-white/[.055] text-white/60'
-			"
-			class="grid size-11 place-items-center rounded-xl transition duration-200 hover:bg-sky-400/15 hover:text-sky-100 focus:ring-2 focus:ring-sky-500/50 focus:outline-none active:scale-95"
-			type="button"
-			aria-label="تنظیمات بازی"
-			:aria-expanded="isOpen"
-			aria-controls="game-settings"
 		>
 			<Icon
 				name="lucide:sliders-horizontal"
 				size="20"
 				class="text-sky-300"
 			/>
-		</button>
+		</UiIconButton>
 		<Transition name="settings-popover">
 			<div
 				v-if="isOpen"
@@ -62,62 +46,55 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 							name="lucide:sliders-horizontal"
 							size="16"
 							class="text-sky-300"
-						/>
-						<span>تنظیمات بازی</span>
+						/><span>تنظیمات بازی</span>
 					</div>
 					<p class="mt-1 pr-6 text-[11px] text-white/40">نمای بازی را مطابق سلیقه‌تان تنظیم کنید</p>
 				</div>
 				<div class="space-y-5 p-4 pt-3">
-					<div>
-						<div class="mb-2 flex items-center justify-between text-xs">
-							<span class="text-white/50">طول واژه</span>
-							<span class="text-white/35">حداقل تا حداکثر</span>
-						</div>
+					<fieldset>
+						<legend class="mb-2 flex w-full items-center justify-between text-xs">
+							<span class="text-white/50">طول واژه</span
+							><span class="text-white/35">حداقل تا حداکثر</span>
+						</legend>
 						<div
 							class="grid grid-cols-2 gap-2"
 							dir="ltr"
 						>
-							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
-								<span class="block text-[10px] text-white/40">MIN</span>
-								<input
+							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
+								><span class="block text-[10px] text-white/40">MIN</span
+								><input
 									v-model.number="minWordLength"
 									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
 									type="number"
 									min="3"
 									:max="maxWordLength"
 									aria-label="حداقل طول واژه"
-								/>
-							</label>
-							<label class="rounded-xl bg-black/20 px-2.5 py-2 text-left">
-								<span class="block text-[10px] text-white/40">MAX</span>
-								<input
+								/> </label
+							><label class="rounded-xl bg-black/20 px-2.5 py-2 text-left"
+								><span class="block text-[10px] text-white/40">MAX</span
+								><input
 									v-model.number="maxWordLength"
 									class="mt-1 w-full bg-transparent text-center text-sm text-white outline-none focus:text-sky-100"
 									type="number"
 									:min="minWordLength"
 									max="25"
 									aria-label="حداکثر طول واژه"
-								/>
-							</label>
+							/></label>
 						</div>
 						<label
 							class="mt-2 flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-xl bg-black/20 px-3 text-xs text-white/65"
-						>
-							<span>مخفی‌کردن واژه‌های سه‌حرفی</span>
-							<input
+							><span>مخفی‌کردن واژه‌های سه‌حرفی</span
+							><input
 								v-model="hideThreeLetterWords"
 								class="size-4 accent-sky-400"
 								type="checkbox"
-							/>
-						</label>
-					</div>
-					<div>
-						<div class="mb-2 flex items-center justify-between text-xs">
-							<span class="text-white/50">تعداد واژه‌ها</span>
-							<span class="rounded-lg bg-sky-400/10 px-2 py-1 text-sky-100">
-								{{ maxResults }}
-							</span>
-						</div>
+						/></label>
+					</fieldset>
+					<fieldset>
+						<legend class="mb-2 flex w-full items-center justify-between text-xs">
+							<span class="text-white/50">تعداد واژه‌ها</span
+							><span class="rounded-lg bg-sky-400/10 px-2 py-1 text-sky-100">{{ maxResults }}</span>
+						</legend>
 						<div
 							class="flex overflow-hidden rounded-xl bg-black/20 p-1"
 							dir="ltr"
@@ -137,9 +114,9 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 								{{ count }}
 							</button>
 						</div>
-					</div>
-					<div>
-						<div class="mb-2 text-xs text-white/50">اندازه جدول</div>
+					</fieldset>
+					<fieldset>
+						<legend class="mb-2 text-xs text-white/50">اندازه جدول</legend>
 						<div
 							class="grid grid-cols-2 gap-2"
 							dir="ltr"
@@ -154,25 +131,19 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 									type="button"
 									:aria-label="`کاهش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension <= 2"
-									@click="changeDimension(index as 0 | 1, -1)"
+									@click="setDimension(index as 0 | 1, -1)"
 								>
 									<Icon
 										name="lucide:minus"
 										size="14"
-									/>
-								</button>
-								<span
-									class="text-sm text-white/80"
-									:aria-label="`${index === 0 ? 'عرض' : 'ارتفاع'}: ${dimension}`"
-								>
-									{{ dimension }}
-								</span>
-								<button
+									/></button
+								><span class="text-sm text-white/80">{{ dimension }}</span
+								><button
 									class="grid size-9 place-items-center rounded-lg text-white/55 transition hover:bg-white/8 hover:text-white focus:ring-2 focus:ring-sky-400/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-25"
 									type="button"
 									:aria-label="`افزایش ${index === 0 ? 'عرض' : 'ارتفاع'} جدول`"
 									:disabled="dimension >= 5"
-									@click="changeDimension(index as 0 | 1, 1)"
+									@click="setDimension(index as 0 | 1, 1)"
 								>
 									<Icon
 										name="lucide:plus"
@@ -182,9 +153,11 @@ const changeDimension = (index: 0 | 1, amount: number) =>
 							</div>
 						</div>
 						<p class="mt-2 text-center text-[10px] text-white/30">عرض × ارتفاع</p>
-					</div>
+					</fieldset>
 				</div>
 			</div>
 		</Transition>
 	</div>
+
+	<!-- prettier-ignore-end -->
 </template>
