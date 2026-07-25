@@ -1,6 +1,6 @@
 import type { FoundWord } from '~/types/types';
 
-import { dictionary } from './dictionary';
+import { loadDictionary } from './dictionary';
 import { computeScore } from './utils';
 
 interface FindWordsOptions {
@@ -16,10 +16,10 @@ interface FindWordsOptions {
  * @param options - Configuration options for the search.
  * @returns An array of the best words found.
  */
-export const searchWordsInGrid = (
+export const searchWordsInGrid = async (
 	grid: string[][],
 	options: FindWordsOptions = {},
-): FoundWord[] => {
+): Promise<FoundWord[]> => {
 	const { minWordLength = 3, maxWordLength = Infinity, maxResults = 21 } = options;
 
 	// --- Input Validation ---
@@ -38,6 +38,7 @@ export const searchWordsInGrid = (
 	}
 	const maximumWordLength = Math.min(maxWordLength, rows * cols);
 	if (maximumWordLength < minWordLength || maxResults <= 0) return [];
+	const dictionary = await loadDictionary();
 
 	// --- Directions for 8 adjacent moves (including diagonals) ---
 	const directions: [number, number][] = [

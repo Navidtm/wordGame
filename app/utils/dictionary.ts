@@ -1,5 +1,3 @@
-import wordList from '../data/fa-IR.json';
-
 /** Normalizes dictionary spellings to the characters available on a board tile. */
 export const normalizeWord = (word: string): string =>
 	word.replaceAll('\u200c', '').replaceAll('ي', 'ی').replaceAll('ك', 'ک');
@@ -11,8 +9,7 @@ class TrieNode {
 }
 
 /**
- * A Trie (prefix tree) implementation for efficient word storage and lookup. The entire dictionary
- * is loaded once and reused, preventing per‑request overhead.
+ * A Trie (prefix tree) implementation for efficient word storage and lookup.
  */
 class WordDictionary {
 	private root = new TrieNode();
@@ -71,7 +68,16 @@ class WordDictionary {
 	}
 }
 
-// ==================================================
-// Singleton Instance: Loaded Once, Reused Forever
-// ==================================================
-export const dictionary = new WordDictionary([...new Set(wordList.map(normalizeWord))]);
+let dictionaryPromise: Promise<WordDictionary> | undefined;
+
+/**
+ * Loads the word list only when a completed board needs to be searched. The resulting Trie is
+ * cached for the remainder of the session so subsequent searches do not rebuild it.
+ */
+export const loadDictionary = (): Promise<WordDictionary> => {
+	dictionaryPromise ??= import('../data/fa-IR.json').then(
+		({ default: wordList }) => new WordDictionary([...new Set(wordList.map(normalizeWord))]),
+	);
+
+	return dictionaryPromise;
+};

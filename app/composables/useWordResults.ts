@@ -31,11 +31,13 @@ export const useWordResults = (
 			isSearching.value = true;
 			const { searchWordsInGrid } = await import('~/utils/wordSearch');
 			if (version !== searchVersion) return;
-			words.value = searchWordsInGrid(chunk(chars.value, aspect.value[0]), {
+			const nextWords = await searchWordsInGrid(chunk(chars.value, aspect.value[0]), {
 				minWordLength: settings.minWordLength.value,
 				maxWordLength: settings.maxWordLength.value,
 				maxResults: settings.maxResults.value,
 			});
+			if (version !== searchVersion) return;
+			words.value = nextWords;
 			isSearching.value = false;
 		},
 		{ deep: true, immediate: true },
