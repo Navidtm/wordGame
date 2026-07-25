@@ -1,4 +1,6 @@
 import type { FoundWord } from '~/types/types';
+import { dictionary } from './dictionary';
+import { computeScore } from './utils';
 
 interface FindWordsOptions {
 	minWordLength?: number;
