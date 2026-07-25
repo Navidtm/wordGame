@@ -10,12 +10,6 @@ export default defineNuxtConfig({
 	ssr: false,
 
 	css: ['~/assets/css/main.css'],
-	telemetry: false,
-
-	devServer: {
-		host: '0',
-		port: 3001,
-	},
 
 	experimental: {
 		viteEnvironmentApi: true,
@@ -24,16 +18,8 @@ export default defineNuxtConfig({
 	},
 
 	vite: {
-		clearScreen: false,
 		optimizeDeps: {
 			include: ['es-toolkit'],
 		},
-		envPrefix: ['VITE_', 'TAURI_'],
-		server: {
-			// Tauri requires a consistent port
-			strictPort: true,
-		},
 	},
-
-	ignore: ['**/src-tauri/**'],
 });
