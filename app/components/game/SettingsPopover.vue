@@ -161,6 +161,4 @@ onKeyStroke('Escape', () => isOpen.value && toggle(false));
 			</div>
 		</Transition>
 	</div>
-
-	<!-- prettier-ignore-end -->
 </template>

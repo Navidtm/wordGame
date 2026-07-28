@@ -7,8 +7,6 @@ defineProps<{
 </script>
 
 <template>
-	<!-- prettier-ignore-start -->
-
 	<header class="mb-7 flex items-center justify-between gap-4 px-1 sm:px-2">
 		<div class="flex items-center gap-3.5">
 			<div
@@ -46,6 +44,4 @@ defineProps<{
 			</div>
 		</div>
 	</header>
-
-	<!-- prettier-ignore-end -->
 </template>

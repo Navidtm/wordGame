@@ -201,6 +201,4 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 			</button>
 		</div>
 	</div>
-
-	<!-- prettier-ignore-end -->
 </template>

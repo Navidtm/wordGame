@@ -113,6 +113,4 @@ const emit = defineEmits<{
 			@move-step="emit('moveStep', $event)"
 		/>
 	</section>
-
-	<!-- prettier-ignore-end -->
 </template>
