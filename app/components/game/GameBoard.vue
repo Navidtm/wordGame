@@ -8,6 +8,7 @@ defineProps<{
 	words: FoundWord[];
 	isReady: boolean;
 	isSearching: boolean;
+	searchError: string | null;
 	selectedPathLength: number;
 	maxResults: number;
 	minWordLength: number;
@@ -99,6 +100,7 @@ const emit = defineEmits<{
 			:words="words"
 			:is-ready="isReady"
 			:is-searching="isSearching"
+			:search-error="searchError"
 			:selected-path-length="selectedPathLength"
 			:selected-index="selectedIndex"
 			:step-mode="stepMode"

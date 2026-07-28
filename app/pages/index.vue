@@ -63,17 +63,16 @@ const {
 	clearPath,
 } = useBoardGrid(settings.aspect);
 
-const results = useWordResults(chars, settings.aspect, {
+const { words, isSearching, searchError } = useWordResults(chars, settings.aspect, {
 	minWordLength: settings.effectiveMinWordLength,
 	maxWordLength: settings.maxWordLength,
 	maxResults: settings.maxResults,
 });
 
 const { selectedIndex, stepMode, pathStep, selectedPath, displayedPath, toggleStepMode, moveStep } =
-	usePathSelection(results.words);
+	usePathSelection(words);
 
 const { aspect, maxResults, minWordLength, maxWordLength, hideThreeLetterWords } = settings;
-const { words, isSearching } = results;
 
 watch(cellCount, settings.limitMaxWordLength, { immediate: true });
 onKeyStroke('r', event => {
@@ -122,9 +121,10 @@ onKeyStroke('r', event => {
 				:words="words"
 				:is-ready="isComplete"
 				:is-searching="isSearching"
+				:search-error="searchError"
 				:selected-path-length="selectedPath.length"
 				@clear="clear"
-				@remove="clearPath(displayedPath)"
+				@remove="clearPath(selectedPath)"
 				@toggle-step-mode="toggleStepMode"
 				@move-step="moveStep"
 			/>

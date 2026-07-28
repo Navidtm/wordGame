@@ -9,6 +9,7 @@ const { words, isReady, selectedPathLength } = defineProps<{
 	words: FoundWord[];
 	isReady: boolean;
 	isSearching: boolean;
+	searchError: string | null;
 	selectedPathLength: number;
 }>();
 
@@ -124,6 +125,13 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 			class="grid h-28 place-items-center rounded-2xl bg-white/[.025] text-center text-sm text-content-muted"
 		>
 			در حال جست‌وجوی واژه‌ها…
+		</div>
+		<div
+			v-else-if="searchError"
+			class="grid h-28 place-items-center rounded-2xl bg-red-400/[.06] px-4 text-center text-sm text-red-100"
+			role="alert"
+		>
+			{{ searchError }}
 		</div>
 		<div
 			v-else-if="!isReady"
