@@ -7,6 +7,26 @@ export default defineNuxtConfig({
 
 	modules: ['@vueuse/nuxt', '@unocss/nuxt', '@nuxt/icon'],
 
+	icon: {
+		mode: 'svg',
+		provider: 'none',
+		clientBundle: {
+			icons: [
+				'lucide:check',
+				'lucide:chevron-left',
+				'lucide:chevron-right',
+				'lucide:copy',
+				'lucide:copy-plus',
+				'lucide:minus',
+				'lucide:plus',
+				'lucide:rotate-ccw',
+				'lucide:scan-search',
+				'lucide:sliders-horizontal',
+			],
+		},
+		serverBundle: false,
+	},
+
 	ssr: true,
 
 	runtimeConfig: {
