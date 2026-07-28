@@ -12,20 +12,30 @@ export const useBoardGrid = (aspect: Ref<[number, number]>) => {
 	const progress = computed(() => `${(filledCells.value / cellCount.value) * 100}%`);
 
 	const createEmptyBoard = () => Array<string>(cellCount.value).fill('');
-	const reset = () => {
+	const dismissUndo = () => {
+		previousBoard.value = null;
+		canUndoClear.value = false;
+		clearTimeout(undoTimer);
+	};
+	const resetBoard = () => {
 		chars.value = createEmptyBoard();
+	};
+	const reset = () => {
+		dismissUndo();
+		resetBoard();
 	};
 	const clear = () => {
 		previousBoard.value = [...chars.value];
-		reset();
+		resetBoard();
 		canUndoClear.value = true;
 		clearTimeout(undoTimer);
 		undoTimer = setTimeout(() => (canUndoClear.value = false), 5000);
 	};
 	const undoClear = () => {
-		if (previousBoard.value) chars.value = [...previousBoard.value];
-		canUndoClear.value = false;
-		clearTimeout(undoTimer);
+		if (previousBoard.value?.length === cellCount.value) {
+			chars.value = [...previousBoard.value];
+		}
+		dismissUndo();
 	};
 	const clearPath = (path: number[]) => {
 		path.forEach(index => (chars.value[index] = ''));

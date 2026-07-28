@@ -21,10 +21,28 @@ const { copied, copy } = useClipboard({ legacy: true });
 
 const selectedWord = computed(() => words[selectedIndex.value]?.word ?? '');
 const allWords = computed(() => words.map(({ word }) => word).join('\n'));
+let selectedOnPointerDown: number | null = null;
 
 const focusWord = async (index: number) => {
 	await nextTick();
 	buttons.value?.[index]?.focus();
+};
+
+const preparePointerActivation = (index: number) => {
+	selectedOnPointerDown = selectedIndex.value === index ? index : null;
+};
+
+const activateWord = (index: number, event: MouseEvent) => {
+	const shouldRemove =
+		event.detail === 0 ? selectedIndex.value === index : selectedOnPointerDown === index;
+	selectedOnPointerDown = null;
+
+	if (shouldRemove) {
+		emit('remove');
+		return;
+	}
+
+	selectedIndex.value = index;
 };
 
 watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousCount]) => {
@@ -166,7 +184,9 @@ watch([() => isReady, () => words.length], ([ready, count], [wasReady, previousC
 						? `واژه ${word} انتخاب شده؛ برای حذف انتخاب کنید`
 						: `انتخاب واژه ${word}`
 				"
-				@click="selectedIndex === index ? emit('remove') : (selectedIndex = index)"
+				@pointerdown="preparePointerActivation(index)"
+				@pointercancel="selectedOnPointerDown = null"
+				@click="activateWord(index, $event)"
 				@focus="selectedIndex = index"
 			>
 				{{ word }}
